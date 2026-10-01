@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Protocolo de Medición de Iluminación - Res. SRT 84/2012</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root{
+    --bg:#EEF2F5; --panel:#ffffff; --text:#1F2C36; --muted:#5B6B76;
+    --border:#D7DEE3; --accent:#FF6A00; --accent2:#FFA45C; --ok:#2F7A5C;
+    --warn:#B23B2E; --input-bg:#FBFCFD; --head-bg:#223949; --head-text:#ffffff;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#182229; --panel:#1F2C36; --text:#EAEEF1; --muted:#9AAAB4;
+      --border:#33424C; --accent:#FF8A3D; --accent2:#FFB57A; --ok:#6FBF9B;
+      --warn:#E08272; --input-bg:#152029; --head-bg:#101820; --head-text:#ffffff;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#182229; --panel:#1F2C36; --text:#EAEEF1; --muted:#9AAAB4;
+    --border:#33424C; --accent:#FF8A3D; --accent2:#FFB57A; --ok:#6FBF9B;
+    --warn:#E08272; --input-bg:#152029; --head-bg:#101820; --head-text:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.45;
+  }
+  header{background:var(--head-bg); color:var(--head-text); padding:20px 16px;}
+  header h1{margin:0; font-size:1.25rem; font-weight:700;}
+  header p{margin:6px 0 0; font-size:0.85rem; opacity:0.85; max-width:760px;}
+  .wrap{max-width:900px; margin:0 auto; padding:16px;}
+  .panel{background:var(--panel); border:1px solid var(--border); border-radius:10px; padding:16px; margin-bottom:16px;}
+  .panel h2{margin:0 0 12px; font-size:1.02rem; border-bottom:1px solid var(--border); padding-bottom:8px;}
+  label{display:block; font-size:0.78rem; color:var(--muted); margin-bottom:3px; margin-top:10px;}
+  input[type=text], input[type=number], input[type=date], input[type=time], select, textarea{
+    width:100%; padding:8px 9px; border:1px solid var(--border); border-radius:6px;
+    background:var(--input-bg); color:var(--text); font-size:0.9rem; font-family:inherit;
+  }
+  textarea{resize:vertical; min-height:60px;}
+  .row{display:flex; gap:10px; flex-wrap:wrap;}
+  .row > div{flex:1; min-width:160px;}
+  button{background:var(--accent); color:#fff; border:none; border-radius:6px; padding:9px 14px; font-size:0.85rem; cursor:pointer; font-weight:600;}
+  button.secondary{background:transparent; color:var(--accent); border:1px solid var(--accent);}
+  button.danger{background:transparent; color:var(--warn); border:1px solid var(--warn);}
+  table{width:100%; border-collapse:collapse; font-size:0.78rem; margin-top:6px;}
+  th,td{border:1px solid var(--border); padding:5px 6px; text-align:left; vertical-align:middle;}
+  th{background:var(--panel); color:var(--muted); font-weight:600; font-size:0.68rem; text-transform:uppercase;}
+  .results{margin-top:4px;}
+  .grid3{display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:6px;}
+  @media (max-width:600px){.grid3{grid-template-columns:1fr;}}
+  .kv{background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:10px 12px; text-align:center;}
+  .kv .k{font-size:0.7rem; color:var(--muted); text-transform:uppercase; letter-spacing:.02em;}
+  .kv .v{font-size:1.4rem; font-weight:800; margin-top:2px; color:var(--accent);}
+  .kv.ok .v{color:var(--ok);} .kv.warn .v{color:var(--warn);}
+  .badge{display:inline-block; padding:2px 8px; border-radius:20px; font-size:0.72rem; font-weight:700;}
+  .badge.ok{background:rgba(63,107,74,.15); color:var(--ok);}
+  .badge.warn{background:rgba(163,73,44,.15); color:var(--warn);}
+  .badge.pending{background:rgba(101,97,79,.12); color:var(--muted);}
+  .disclaimer{font-size:0.78rem; color:var(--muted); background:var(--panel); border-left:3px solid var(--accent); padding:10px 12px; border-radius:0 6px 6px 0; margin-bottom:16px;}
+  .note{font-size:0.76rem; color:var(--muted); margin-top:6px;}
+  .nonconform-list{font-size:0.82rem; margin-top:8px; padding-left:18px;}
+  .nonconform-list li{margin-bottom:4px;}
+  .actions-bar{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;}
+  footer{text-align:center; font-size:0.72rem; color:var(--muted); padding:20px 16px 40px;}
+  details{border:1px solid var(--border); border-radius:8px; padding:10px 14px; background:var(--bg);}
+  summary{cursor:pointer; font-size:0.88rem; font-weight:600; color:var(--text);}
+  .ref-table td{color:var(--muted); font-size:0.78rem;}
+  .ref-table td.lux{color:var(--accent); font-weight:700; white-space:nowrap;}
+
+  /* ---- sectores ---- */
+  .sectors-list{display:flex; flex-direction:column; gap:14px;}
+  .sector-card{border:1px solid var(--border); border-radius:8px; padding:12px 14px; background:var(--bg); break-inside:avoid; page-break-inside:avoid;}
+  .sector-card > summary{cursor:pointer; font-weight:700; font-size:0.88rem; padding-bottom:6px; list-style:revert;}
+  .sector-card[open] > summary{margin-bottom:10px; border-bottom:1px solid var(--border);}
+  .sector-summary-line{display:inline-flex; justify-content:space-between; align-items:center; width:calc(100% - 22px); vertical-align:middle;}
+  .sector-fields{display:grid; grid-template-columns:repeat(4, 1fr); gap:8px;}
+  .sector-fields + .sector-fields{margin-top:8px;}
+  @media (max-width:620px){ .sector-fields{grid-template-columns:repeat(2, 1fr);} }
+  .sector-field label{display:block; font-size:0.66rem; color:var(--muted); margin-bottom:2px;}
+  .sector-field input, .sector-field select{width:100%; font-size:0.8rem; padding:5px 6px;}
+  .sector-summary{display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; margin:10px 0; padding:8px 10px; background:var(--panel); border:1px solid var(--border); border-radius:6px;}
+  @media (max-width:620px){ .sector-summary{grid-template-columns:repeat(1, 1fr);} }
+  .sector-summary .kv{padding:6px 8px;}
+  .sector-summary .kv .v{font-size:1.1rem;}
+  .mini-points th{font-size:0.62rem;}
+  .mini-points td{font-size:0.78rem;}
+  .mini-points td.num-cell{text-align:center; width:2.6em;}
+  .mini-points input[type=number]{width:90px; padding:4px 6px;}
+  .rm-btn{background:none; border:none; color:var(--warn); cursor:pointer; font-size:0.78rem; font-weight:600;}
+  .rm-btn.small{font-size:0.72rem;}
+
+  @media print{
+    @page{ margin: 10mm; }
+    header, .no-print{display:none !important;}
+    body{background:#fff; color:#000;}
+    .panel{border:1px solid #999; break-inside:avoid; background:#fff; padding:8px 10px;}
+    #panelPoints{break-inside:auto; page-break-inside:auto; border:none; background:transparent; padding:0;}
+    .wrap{max-width:100%;}
+    table{font-size:9.5px;}
+    th,td{padding:3px 4px;}
+    .sector-card{border:1px solid #999; background:#fff; padding:7px 9px; break-inside:avoid; page-break-inside:avoid;}
+    .sector-card:not([open]) > *:not(summary){display:block !important;}
+    .sector-card > summary{font-size:9.5px; padding-bottom:4px; margin-bottom:6px;}
+    .sector-field label{font-size:7px;}
+    .sector-field input, .sector-field select{font-size:8.5px; padding:2px 3px; border-color:#999;}
+    .sector-summary{background:#fff; border-color:#999; padding:5px 6px;}
+    .sector-summary .kv{background:#fff; border-color:#999; padding:4px;}
+    .sector-summary .kv .v{font-size:0.95rem;}
+    .sector-summary .kv .k{font-size:0.6rem;}
+    .mini-points{font-size:8.5px;}
+    th{background:#eee; color:#333;}
+    .kv{background:#fff; border:1px solid #999; padding:6px;}
+    .kv .v{font-size:1.1rem;}
+    details{border:1px solid #999; background:#fff;}
+    details:not([open]){display:block;}
+    summary::marker{display:none;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Protocolo para la Medición de Iluminación en el Ambiente Laboral</h1>
+  <p>Resolución S.R.T. 84/2012 — Anexo IV del Decreto 351/79 (Ley 19.587). Valores de referencia según norma IRAM-AADL J 20-06.</p>
+</header>
+
+<div class="wrap">
+
+  <div class="disclaimer no-print">
+    <strong>Antes de usarla:</strong> el valor "requerido" se autocompleta según la tarea visual elegida, tomando el extremo inferior del rango de la tabla de referencia — es editable. La media y la uniformidad de cada sector se calculan solas a partir de los puntos cargados. La clasificación de la tarea y la validez del informe quedan a cargo del profesional matriculado interviniente.
+  </div>
+
+  <div class="panel">
+    <h2>A. Datos del establecimiento</h2>
+    <div class="row">
+      <div><label>1. Razón social</label><input type="text" id="f_razon"></div>
+      <div><label>6. C.U.I.T.</label><input type="text" id="f_cuit" placeholder="XX-XXXXXXXX-X"></div>
+    </div>
+    <div class="row">
+      <div style="flex:2.4; min-width:220px;"><label>2. Dirección</label><input type="text" id="f_dir"></div>
+      <div><label>3. Localidad</label><input type="text" id="f_loc"></div>
+      <div><label>4. Provincia</label><input type="text" id="f_prov"></div>
+      <div style="flex:0 0 90px; min-width:80px;"><label>5. Código postal</label><input type="text" id="f_cp" maxlength="7"></div>
+    </div>
+    <div class="row">
+      <div><label>7. Horarios / turnos habituales de trabajo</label><input type="text" id="f_horarios"></div>
+    </div>
+  </div>
+
+  <div class="panel">
+    <h2>B. Datos de la medición</h2>
+    <div class="row">
+      <div><label>8. Marca, modelo y N° de serie del instrumento</label><input type="text" id="f_instr"></div>
+      <div><label>9. Fecha de calibración del instrumento</label><input type="date" id="f_calib"></div>
+    </div>
+    <div class="row">
+      <div><label>10. Metodología utilizada</label><input type="text" id="f_metod" placeholder="Ej: grilla según IRAM-AADL J 2022"></div>
+    </div>
+    <div class="row">
+      <div><label>11. Fecha de la medición</label><input type="date" id="f_fecha"></div>
+      <div><label>12. Hora de inicio</label><input type="time" id="f_hini"></div>
+      <div><label>13. Hora de finalización</label><input type="time" id="f_hfin"></div>
+      <div><label>14. Condiciones atmosféricas</label><input type="text" id="f_atmos" placeholder="Ej: cielo cubierto"></div>
+    </div>
+  </div>
+
+  <div class="panel no-print">
+    <details>
+      <summary>Tabla de referencia — Anexo IV Dec. 351/79 (IRAM-AADL J 20-06)</summary>
+      <table class="ref-table" style="margin-top:10px;">
+        <thead><tr><th>Clase de tarea visual</th><th>Lux</th><th>Ejemplos</th></tr></thead>
+        <tbody>
+          <tr><td>Visión ocasional solamente</td><td class="lux">100</td><td>Sala de calderas, depósito de materiales voluminosos</td></tr>
+          <tr><td>Tareas intermitentes, ordinarias y fáciles</td><td class="lux">100–300</td><td>Trabajos simples y mecánicos, inspección general</td></tr>
+          <tr><td>Tarea moderadamente crítica y prolongada</td><td class="lux">300–750</td><td>Trabajos mecánicos y manuales medianos, oficina</td></tr>
+          <tr><td>Tareas severas y prolongadas, poco contraste</td><td class="lux">750–1500</td><td>Trabajos finos, montajes e inspección</td></tr>
+          <tr><td>Tareas muy severas, detalles minuciosos</td><td class="lux">1500–3000</td><td>Mecanismos delicados, molienda fina</td></tr>
+          <tr><td>Trabajo fino de relojería y reparación</td><td class="lux">3000</td><td>Relojería, reparaciones de precisión</td></tr>
+          <tr><td>Tareas excepcionales o importantes</td><td class="lux">5000–10000</td><td>Campo operatorio en sala de cirugía</td></tr>
+        </tbody>
+      </table>
+      <p class="note">El valor final de clasificación de la tarea es responsabilidad del profesional interviniente.</p>
+    </details>
+  </div>
+
+  <div class="panel" id="panelPoints">
+    <h2>C. Puntos de muestreo por sector</h2>
+
+    <div class="calc-box no-print" style="background:var(--bg); border:1px solid var(--border); border-radius:8px; padding:12px 14px; margin-bottom:16px;">
+      <div style="font-size:0.85rem; font-weight:600; margin-bottom:8px;">Cálculo del número mínimo de puntos — índice de local (Res. SRT 84/2012)</div>
+      <div class="row">
+        <div><label>Largo del recinto (m)</label><input type="number" id="calcLargo" step="0.01" min="0"></div>
+        <div><label>Ancho del recinto (m)</label><input type="number" id="calcAncho" step="0.01" min="0"></div>
+        <div><label>Altura de montaje (m)</label><input type="number" id="calcAltura" step="0.01" min="0"></div>
+        <div><label>Nombre del sector a crear</label><input type="text" id="calcSector" placeholder="Ej: Depósito"></div>
+      </div>
+      <div class="actions-bar" style="margin-top:10px;">
+        <button type="button" class="secondary" id="btnCalc">Calcular</button>
+        <button type="button" id="btnInsertPoints" disabled>Crear sector con los puntos calculados</button>
+      </div>
+      <div class="note" id="calcResult"></div>
+      <p class="note">K = (Largo × Ancho) / [Altura de montaje × (Largo + Ancho)]. x = K redondeado al entero superior (máximo 4, ya que todo K ≥ 3 toma x = 4). N° mínimo de puntos = (x+2)². Repetí el cálculo por cada sector con dimensiones distintas. Si el recinto es irregular, dividilo en sub-áreas cuadradas o rectangulares y calculá cada una por separado.</p>
+    </div>
+
+    <div id="sectorsBody" class="sectors-list"></div>
+    <div class="actions-bar no-print">
+      <button class="secondary" id="btnAddSector">+ Agregar sector (manual)</button>
+    </div>
+  </div>
+
+  <div class="panel" id="resumenPanel">
+    <h2>D. Resultado del relevamiento</h2>
+    <div class="grid3 results">
+      <div class="kv"><div class="k">Puntos medidos</div><div class="v" id="sumTotal">0</div></div>
+      <div class="kv ok"><div class="k">Cumplen nivel</div><div class="v" id="sumOk">0</div></div>
+      <div class="kv warn"><div class="k">No cumplen</div><div class="v" id="sumBad">0</div></div>
+    </div>
+    <ul class="nonconform-list" id="nonconform"></ul>
+  </div>
+
+  <div class="panel">
+    <h2>E. Observaciones y documentación</h2>
+    <div class="row">
+      <div><label>Certificado de calibración adjunto</label>
+        <select id="f_certif"><option>Sí</option><option>No</option></select>
+      </div>
+      <div><label>Plano o croquis adjunto</label>
+        <select id="f_plano"><option>Sí</option><option>No</option></select>
+      </div>
+      <div><label>Profesional interviniente</label><input type="text" id="f_prof" placeholder="Nombre y matrícula"></div>
+    </div>
+    <label>Observaciones</label>
+    <textarea id="f_obs" placeholder="Recomendaciones, plan de acción, condiciones particulares del relevamiento..."></textarea>
+  </div>
+
+  <div class="actions-bar no-print">
+    <button id="btnPrint" class="secondary">Imprimir (en este dispositivo)</button>
+    <button id="btnDownload" class="secondary" style="display:none;">Descargar informe (HTML)</button>
+    <button id="btnReset" class="danger">Borrar todo</button>
+  </div>
+  <p class="note no-print" id="downloadHint" style="display:none;">Si "Imprimir" no abre nada en tu dispositivo, usá "Descargar informe": abrí ese archivo y desde ahí imprimís o guardás como PDF.</p>
+  <p class="note no-print">Los datos quedan guardados en este navegador (no se comparten) mientras no borres todo.</p>
+
+</div>
+
+<footer>Basado en la Resolución S.R.T. 84/2012 y Anexo IV del Decreto 351/79, reglamentario de la Ley 19.587 de Higiene y Seguridad en el Trabajo (Argentina).</footer>
+
+<script>
+(function(){
+"use strict";
+
+const TASKS = [
+  {label:"— Sin clasificar —", value:null},
+  {label:"Visión ocasional solamente (100 lux)", value:100},
+  {label:"Tareas intermitentes, ordinarias y fáciles (100–300 lux)", value:100},
+  {label:"Tarea moderadamente crítica y prolongada (300–750 lux)", value:300},
+  {label:"Tareas severas y prolongadas, poco contraste (750–1500 lux)", value:750},
+  {label:"Tareas muy severas, detalles minuciosos (1500–3000 lux)", value:1500},
+  {label:"Trabajo fino de relojería y reparación (3000 lux)", value:3000},
+  {label:"Tareas excepcionales o importantes (5000–10000 lux)", value:5000},
+];
+
+let sectorCount = 0;
+let sectors = [];
+
+function escapeHtml(s){
+  return String(s==null?'':s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function newPoint(sector){
+  sector.pointCounter = (sector.pointCounter || 0) + 1;
+  return {id: sector.pointCounter, medido: ''};
+}
+
+function addSector(prefill, nPoints){
+  prefill = prefill || {};
+  nPoints = nPoints || 3;
+  sectorCount++;
+  const s = Object.assign({
+    id: sectorCount, sector:'', seccion:'', hora:'', iluminacion:'Artificial',
+    fuente:'Descarga', sistema:'General', tarea:0, requerido:'', points:[], pointCounter:0
+  }, prefill);
+  for(let i=0;i<nPoints;i++){ s.points.push(newPoint(s)); }
+  sectors.push(s);
+  renderSectors();
+  saveState();
+}
+
+function removeSector(id){
+  sectors = sectors.filter(s=>s.id!==id);
+  renderSectors();
+  saveState();
+}
+window.removeSector = removeSector;
+
+function updateSectorSimple(id, field, value){
+  const s = sectors.find(s=>s.id===id);
+  if(!s) return;
+  s[field] = value;
+  if(field==='sector'){
+    const h = document.getElementById('sechead-'+id);
+    if(h) h.textContent = 'Sector: ' + (value || '(sin nombre)');
+  }
+  saveState();
+}
+window.updateSectorSimple = updateSectorSimple;
+
+function updateSectorTarea(id, value){
+  const s = sectors.find(s=>s.id===id);
+  if(!s) return;
+  s.tarea = value;
+  const t = TASKS[value];
+  if(t && t.value!==null){
+    s.requerido = t.value;
+    const reqInput = document.getElementById('req-'+id);
+    if(reqInput) reqInput.value = t.value;
+  }
+  updateSectorDerived(id);
+}
+window.updateSectorTarea = updateSectorTarea;
+
+function updateSectorRequerido(id, value){
+  const s = sectors.find(s=>s.id===id);
+  if(!s) return;
+  s.requerido = value;
+  updateSectorDerived(id);
+}
+window.updateSectorRequerido = updateSectorRequerido;
+
+function addPointToSector(sectorId){
+  const s = sectors.find(s=>s.id===sectorId);
+  if(!s) return;
+  s.points.push(newPoint(s));
+  renderSectors();
+  saveState();
+}
+window.addPointToSector = addPointToSector;
+
+function removePointFromSector(sectorId, pointId){
+  const s = sectors.find(s=>s.id===sectorId);
+  if(!s) return;
+  s.points = s.points.filter(p=>p.id!==pointId);
+  renderSectors();
+  saveState();
+}
+window.removePointFromSector = removePointFromSector;
+
+function updatePointMedido(sectorId, pointId, value){
+  const s = sectors.find(s=>s.id===sectorId);
+  if(!s) return;
+  const p = s.points.find(p=>p.id===pointId);
+  if(!p) return;
+  p.medido = value;
+  updateSectorDerived(sectorId);
+}
+window.updatePointMedido = updatePointMedido;
+
+function updateSectorDerived(sectorId){
+  const s = sectors.find(s=>s.id===sectorId);
+  if(!s) return;
+  const stats = sectorStats(s);
+
+  const nEl = document.getElementById('kvn-v-'+s.id);
+  if(nEl) nEl.textContent = stats.n;
+
+  const emEl = document.getElementById('kvem-v-'+s.id);
+  if(emEl) emEl.textContent = stats.emedia!==null ? stats.emedia.toFixed(0)+' lux' : '—';
+
+  const uniEl = document.getElementById('kvuni-v-'+s.id);
+  if(uniEl) uniEl.textContent = stats.uniformKnown ? (stats.uniformCumple?'Cumple':'No cumple') : '—';
+  const uniBox = document.getElementById('kvuni-'+s.id);
+  if(uniBox){
+    uniBox.classList.remove('ok','warn');
+    if(stats.uniformKnown) uniBox.classList.add(stats.uniformCumple?'ok':'warn');
+  }
+
+  s.points.forEach(p=>{
+    const known = p.medido!=='' && s.requerido!=='';
+    const cumple = known && Number(p.medido) >= Number(s.requerido);
+    const cell = document.getElementById('nivel-'+s.id+'-'+p.id);
+    if(cell) cell.innerHTML = known
+      ? `<span class="badge ${cumple?'ok':'warn'}">${cumple?'Cumple':'No cumple'}</span>`
+      : `<span class="badge pending">—</span>`;
+  });
+
+  const overall = sectorOverallStatus(s);
+  const statusEl = document.getElementById('secstatus-'+s.id);
+  if(statusEl){
+    statusEl.className = 'badge ' + overall.cls;
+    statusEl.textContent = overall.label;
+  }
+
+  updateSummary();
+  saveState();
+}
+
+function sectorStats(s){
+  const medidos = s.points.filter(p=>p.medido!=='').map(p=>Number(p.medido));
+  const n = medidos.length;
+  const emedia = n ? (medidos.reduce((a,b)=>a+b,0)/n) : null;
+  const emin = n ? Math.min(...medidos) : null;
+  const uniformKnown = emedia!==null;
+  const uniformCumple = uniformKnown ? (emin >= emedia/2) : null;
+  return {n, emedia, emin, uniformKnown, uniformCumple};
+}
+
+function sectorOverallStatus(s){
+  const withData = s.points.filter(p=>p.medido!=='' && s.requerido!=='');
+  if(withData.length===0) return {label:'Sin datos', cls:'pending'};
+  const stats = sectorStats(s);
+  const allNivelOk = withData.every(p=>Number(p.medido) >= Number(s.requerido));
+  const uniOk = stats.uniformKnown ? stats.uniformCumple : true;
+  const cumple = allNivelOk && uniOk;
+  return {label: cumple?'Cumple':'No cumple', cls: cumple?'ok':'warn'};
+}
+
+function onSectorToggle(id, isOpen){
+  const s = sectors.find(s=>s.id===id);
+  if(!s) return;
+  s.collapsed = !isOpen;
+  saveState();
+}
+window.onSectorToggle = onSectorToggle;
+
+function renderSectors(){
+  const container = document.getElementById('sectorsBody');
+  container.innerHTML = '';
+  sectors.forEach(s=>{
+    const stats = sectorStats(s);
+    const overall = sectorOverallStatus(s);
+    const card = document.createElement('details');
+    card.className = 'sector-card';
+    if(!s.collapsed) card.open = true;
+    card.setAttribute('ontoggle', `onSectorToggle(${s.id}, this.open)`);
+
+    const pointsRows = s.points.map(p=>{
+      const known = p.medido!=='' && s.requerido!=='';
+      const cumple = known && Number(p.medido) >= Number(s.requerido);
+      return `<tr>
+        <td class="num-cell">${p.id}</td>
+        <td><input type="number" value="${p.medido}" oninput="updatePointMedido(${s.id},${p.id},this.value)"></td>
+        <td id="nivel-${s.id}-${p.id}">${known ? `<span class="badge ${cumple?'ok':'warn'}">${cumple?'Cumple':'No cumple'}</span>` : `<span class="badge pending">—</span>`}</td>
+        <td class="no-print"><button class="rm-btn small" onclick="removePointFromSector(${s.id},${p.id})" title="Eliminar punto">✕</button></td>
+      </tr>`;
+    }).join('');
+
+    card.innerHTML = `
+      <summary><span class="sector-summary-line">
+        <span id="sechead-${s.id}">${escapeHtml(s.sector) || '(sin nombre)'}</span>
+        <span class="badge ${overall.cls}" id="secstatus-${s.id}">${overall.label}</span>
+      </span></summary>
+
+      <div class="actions-bar no-print" style="justify-content:flex-end; margin:8px 0 10px;">
+        <button class="rm-btn" onclick="removeSector(${s.id})" title="Eliminar sector">✕ Eliminar sector</button>
+      </div>
+
+      <div class="sector-fields">
+        <div class="sector-field"><label>Sector</label><input type="text" value="${escapeHtml(s.sector)}" oninput="updateSectorSimple(${s.id},'sector',this.value)"></div>
+        <div class="sector-field"><label>Sección / puesto</label><input type="text" value="${escapeHtml(s.seccion)}" oninput="updateSectorSimple(${s.id},'seccion',this.value)"></div>
+        <div class="sector-field"><label>Hora</label><input type="time" value="${s.hora}" oninput="updateSectorSimple(${s.id},'hora',this.value)"></div>
+        <div class="sector-field"><label>Iluminación</label><select onchange="updateSectorSimple(${s.id},'iluminacion',this.value)">${['Natural','Artificial','Mixta'].map(o=>`<option ${s.iluminacion===o?'selected':''}>${o}</option>`).join('')}</select></div>
+      </div>
+      <div class="sector-fields">
+        <div class="sector-field"><label>Fuente</label><select onchange="updateSectorSimple(${s.id},'fuente',this.value)">${['Incandescente','Descarga','Mixta'].map(o=>`<option ${s.fuente===o?'selected':''}>${o}</option>`).join('')}</select></div>
+        <div class="sector-field"><label>Sistema</label><select onchange="updateSectorSimple(${s.id},'sistema',this.value)">${['General','Localizada','Mixta'].map(o=>`<option ${s.sistema===o?'selected':''}>${o}</option>`).join('')}</select></div>
+        <div class="sector-field"><label>Tarea visual (IRAM-AADL J 20-06)</label><select onchange="updateSectorTarea(${s.id},this.value)">${TASKS.map((t,i)=>`<option value="${i}" ${s.tarea==i?'selected':''}>${t.label}</option>`).join('')}</select></div>
+        <div class="sector-field"><label>Requerido (lux)</label><input type="number" id="req-${s.id}" value="${s.requerido}" oninput="updateSectorRequerido(${s.id},this.value)"></div>
+      </div>
+
+      <div class="sector-summary">
+        <div class="kv" id="kvn-${s.id}"><div class="k">Puntos medidos</div><div class="v" id="kvn-v-${s.id}">${stats.n}</div></div>
+        <div class="kv" id="kvem-${s.id}"><div class="k">E media calculada</div><div class="v" id="kvem-v-${s.id}">${stats.emedia!==null ? stats.emedia.toFixed(0)+' lux' : '—'}</div></div>
+        <div class="kv ${stats.uniformKnown ? (stats.uniformCumple?'ok':'warn') : ''}" id="kvuni-${s.id}"><div class="k">Uniformidad (E mín ≥ E media/2)</div><div class="v" id="kvuni-v-${s.id}">${stats.uniformKnown ? (stats.uniformCumple?'Cumple':'No cumple') : '—'}</div></div>
+      </div>
+
+      <table class="mini-points">
+        <thead><tr><th>Punto N°</th><th>Medido (lux)</th><th>Nivel (≥ requerido)</th><th class="no-print"></th></tr></thead>
+        <tbody>${pointsRows}</tbody>
+      </table>
+      <div class="actions-bar no-print">
+        <button class="secondary" onclick="addPointToSector(${s.id})">+ Agregar punto a este sector</button>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+  updateSummary();
+}
+
+function updateSummary(){
+  let total = 0, ok = 0, bad = 0;
+  const bySector = [];
+  sectors.forEach(s=>{
+    const stats = sectorStats(s);
+    const items = [];
+    s.points.forEach(p=>{
+      if(p.medido==='' || s.requerido==='') return;
+      total++;
+      if(Number(p.medido) >= Number(s.requerido)){ ok++; }
+      else {
+        bad++;
+        items.push(`Punto ${p.id}: medido <strong>${p.medido} lux</strong>, requerido ${s.requerido} lux.`);
+      }
+    });
+    if(stats.uniformKnown && !stats.uniformCumple){
+      items.push(`No cumple la uniformidad (E mínima ${stats.emin} lux, la mitad de la E media es ${(stats.emedia/2).toFixed(0)} lux).`);
+    }
+    if(items.length){
+      bySector.push({name: escapeHtml(s.sector) || '(sin nombre)', seccion: escapeHtml(s.seccion), items});
+    }
+  });
+
+  document.getElementById('sumTotal').textContent = total;
+  document.getElementById('sumOk').textContent = ok;
+  document.getElementById('sumBad').textContent = bad;
+
+  const list = document.getElementById('nonconform');
+  if(bySector.length === 0){
+    list.innerHTML = total > 0
+      ? '<li>Todos los puntos y sectores relevados con datos completos cumplen el nivel mínimo y la uniformidad requeridos.</li>'
+      : '';
+  } else {
+    list.innerHTML = bySector.map(g => `
+      <li style="margin-top:8px; list-style:none; margin-left:-18px;">
+        <strong>${g.name}${g.seccion ? ' — ' + g.seccion : ''}</strong>
+        <ul style="margin-top:4px;">${g.items.map(t=>`<li>${t}</li>`).join('')}</ul>
+      </li>`).join('');
+  }
+}
+
+function val(id){ return document.getElementById(id).value || ''; }
+
+function collectState(){
+  return {
+    razon:val('f_razon'), cuit:val('f_cuit'), dir:val('f_dir'), loc:val('f_loc'),
+    prov:val('f_prov'), cp:val('f_cp'), horarios:val('f_horarios'),
+    instr:val('f_instr'), calib:val('f_calib'), metod:val('f_metod'),
+    fecha:val('f_fecha'), hini:val('f_hini'), hfin:val('f_hfin'), atmos:val('f_atmos'),
+    certif:val('f_certif'), plano:val('f_plano'), prof:val('f_prof'), obs:val('f_obs'),
+    sectors: sectors
+  };
+}
+
+function saveState(){
+  try{ localStorage.setItem('iluminacionState', JSON.stringify(collectState())); }catch(e){}
+}
+
+function loadState(){
+  let s = null;
+  try{ s = JSON.parse(localStorage.getItem('iluminacionState')); }catch(e){}
+  if(!s) return false;
+  ['razon','cuit','dir','loc','prov','cp','horarios','instr','calib','metod','fecha','hini','hfin','atmos','certif','plano','prof','obs']
+    .forEach(k=>{
+      const el = document.getElementById('f_'+k);
+      if(el && s[k]!==undefined) el.value = s[k];
+    });
+  if(Array.isArray(s.sectors) && s.sectors.length){
+    sectors = [];
+    sectorCount = 0;
+    s.sectors.forEach(sec=>{
+      sectorCount = Math.max(sectorCount, sec.id||0);
+      let maxPointId = 0;
+      (sec.points||[]).forEach(p=>{ maxPointId = Math.max(maxPointId, p.id||0); });
+      if(!sec.pointCounter) sec.pointCounter = maxPointId;
+      sectors.push(sec);
+    });
+    renderSectors();
+  }
+  return true;
+}
+
+['f_razon','f_cuit','f_dir','f_loc','f_prov','f_cp','f_horarios','f_instr','f_calib','f_metod',
+ 'f_fecha','f_hini','f_hfin','f_atmos','f_certif','f_plano','f_prof','f_obs'].forEach(id=>{
+  const el = document.getElementById(id);
+  if(el) el.addEventListener('input', saveState);
+  if(el) el.addEventListener('change', saveState);
+});
+
+function buildReportHtml(){
+  const s = collectState();
+  let total=0, ok=0, bad=0;
+  const badLines = [];
+  const sectorBlocks = sectors.map(sec=>{
+    const stats = sectorStats(sec);
+    const rows = sec.points.map(p=>{
+      let cumple = 's/d';
+      if(p.medido!=='' && sec.requerido!==''){
+        total++;
+        const isOk = Number(p.medido) >= Number(sec.requerido);
+        cumple = isOk ? 'Cumple' : 'No cumple';
+        if(isOk) ok++; else { bad++; badLines.push(`Punto ${p.id} (${escapeHtml(sec.sector)||'s/d'}): ${p.medido} lux medidos, se requieren ${sec.requerido} lux.`); }
+      }
+      return `<tr><td>${p.id}</td><td>${p.medido||'-'}</td><td>${cumple}</td></tr>`;
+    }).join('');
+    if(stats.uniformKnown && !stats.uniformCumple){
+      badLines.push(`Sector "${escapeHtml(sec.sector)||'sin nombre'}": no cumple la uniformidad (E mínima ${stats.emin} lux, la mitad de la E media es ${(stats.emedia/2).toFixed(0)} lux).`);
+    }
+    return `<h3>Sector: ${escapeHtml(sec.sector)||'(sin nombre)'}</h3>
+    <p><strong>Sección/puesto:</strong> ${escapeHtml(sec.seccion)} &nbsp; <strong>Hora:</strong> ${escapeHtml(sec.hora)}<br>
+    <strong>Iluminación:</strong> ${sec.iluminacion} &nbsp; <strong>Fuente:</strong> ${sec.fuente} &nbsp; <strong>Sistema:</strong> ${sec.sistema}<br>
+    <strong>Requerido:</strong> ${sec.requerido||'-'} lux &nbsp; <strong>E media calculada:</strong> ${stats.emedia!==null?stats.emedia.toFixed(0):'-'} lux &nbsp; <strong>Uniformidad:</strong> ${stats.uniformKnown?(stats.uniformCumple?'Cumple':'No cumple'):'s/d'}</p>
+    <table><thead><tr><th>Punto N°</th><th>Medido (lux)</th><th>Resultado</th></tr></thead><tbody>${rows}</tbody></table>`;
+  }).join('');
+
+  const obsList = badLines.length
+    ? `<ul>${badLines.map(t=>`<li>${t}</li>`).join('')}</ul>`
+    : `<p>Todos los puntos y sectores relevados cumplen el nivel mínimo y la uniformidad requeridos según Anexo IV del Decreto 351/79.</p>`;
+
+  return `<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+  <title>Informe - Medición de Iluminación</title>
+  <style>
+    body{font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,sans-serif;max-width:900px;margin:30px auto;padding:0 20px;color:#222;}
+    h1,h2,h3{color:#2c2717;} table{width:100%;border-collapse:collapse;font-size:12.5px;margin:8px 0 18px;}
+    th,td{border:1px solid #999;padding:6px 8px;text-align:left;} th{background:#eee;}
+    .sig{margin-top:50px;border-top:1px solid #333;width:320px;padding-top:6px;font-size:12px;}
+  </style></head><body>
+  <h1>Protocolo para la Medición de Iluminación en el Ambiente Laboral</h1>
+  <p>Resolución S.R.T. N° 84/2012 — Anexo IV del Decreto 351/79 (Ley 19.587)</p>
+  <h2>A. Datos del establecimiento</h2>
+  <p><strong>Razón social:</strong> ${escapeHtml(s.razon)} &nbsp; <strong>C.U.I.T.:</strong> ${escapeHtml(s.cuit)}<br>
+  <strong>Dirección:</strong> ${escapeHtml(s.dir)}, ${escapeHtml(s.loc)}, ${escapeHtml(s.prov)} (CP ${escapeHtml(s.cp)})<br>
+  <strong>Horarios/turnos:</strong> ${escapeHtml(s.horarios)}</p>
+  <h2>B. Datos de la medición</h2>
+  <p><strong>Instrumento:</strong> ${escapeHtml(s.instr)} &nbsp; <strong>Calibración:</strong> ${escapeHtml(s.calib)}<br>
+  <strong>Metodología:</strong> ${escapeHtml(s.metod)}<br>
+  <strong>Fecha:</strong> ${escapeHtml(s.fecha)} &nbsp; <strong>Horario:</strong> ${escapeHtml(s.hini)} a ${escapeHtml(s.hfin)}<br>
+  <strong>Condiciones atmosféricas:</strong> ${escapeHtml(s.atmos)}</p>
+  <h2>C. Puntos de muestreo por sector</h2>
+  ${sectorBlocks}
+  <h2>D. Análisis y recomendaciones</h2>
+  <p>Puntos medidos: ${total} · Cumplen: ${ok} · No cumplen: ${bad}</p>
+  ${obsList}
+  <h2>E. Documentación y observaciones</h2>
+  <p><strong>Certificado de calibración adjunto:</strong> ${escapeHtml(s.certif)} &nbsp; <strong>Plano o croquis adjunto:</strong> ${escapeHtml(s.plano)}</p>
+  <p><strong>Observaciones:</strong> ${escapeHtml(s.obs)}</p>
+  <div class="sig">Firma, aclaración y matrícula del profesional interviniente<br>${escapeHtml(s.prof)}</div>
+  </body></html>`;
+}
+
+let downloadsCap = null;
+(async function initCapabilities(){
+  try{
+    if(window.claude && typeof window.claude.use === 'function'){
+      downloadsCap = await window.claude.use('downloads');
+      if(downloadsCap){
+        document.getElementById('btnDownload').style.display = '';
+        document.getElementById('downloadHint').style.display = '';
+      }
+    }
+  }catch(e){ /* capacidad no disponible en este visor */ }
+})();
+
+document.getElementById('btnDownload').addEventListener('click', async ()=>{
+  if(!downloadsCap) return;
+  try{
+    const html = buildReportHtml();
+    await downloadsCap.save({filename: 'informe_iluminacion.html', data: html});
+  }catch(e){
+    alert('No se pudo generar la descarga en este momento. Probá con "Imprimir".');
+  }
+});
+
+let lastCalcN = 0;
+document.getElementById('btnCalc').addEventListener('click', ()=>{
+  const L = parseFloat(document.getElementById('calcLargo').value);
+  const A = parseFloat(document.getElementById('calcAncho').value);
+  const H = parseFloat(document.getElementById('calcAltura').value);
+  const resultEl = document.getElementById('calcResult');
+  const insertBtn = document.getElementById('btnInsertPoints');
+  if(!L || !A || !H){
+    resultEl.textContent = 'Completá largo, ancho y altura de montaje (valores mayores a 0).';
+    insertBtn.disabled = true;
+    lastCalcN = 0;
+    return;
+  }
+  const K = (L*A) / (H*(L+A));
+  let x = Math.ceil(K);
+  if(x < 1) x = 1;
+  if(K >= 3) x = 4;
+  const N = Math.pow(x+2, 2);
+  lastCalcN = N;
+  resultEl.innerHTML = `Índice de local (K) = ${K.toFixed(2)} → x = ${x} → <strong>número mínimo de puntos = ${N}</strong>. Se va a crear un sector nuevo con ${N} puntos.`;
+  insertBtn.disabled = false;
+});
+
+document.getElementById('btnInsertPoints').addEventListener('click', ()=>{
+  if(lastCalcN <= 0) return;
+  const sectorName = document.getElementById('calcSector').value || '';
+  addSector({sector: sectorName}, lastCalcN);
+});
+
+document.getElementById('btnPrint').addEventListener('click', ()=> window.print());
+document.getElementById('btnAddSector').addEventListener('click', ()=> addSector());
+document.getElementById('btnReset').addEventListener('click', ()=>{
+  if(confirm('¿Borrar todos los datos cargados?')){
+    try{ localStorage.removeItem('iluminacionState'); }catch(e){}
+    sectors = [];
+    sectorCount = 0;
+    ['f_razon','f_cuit','f_dir','f_loc','f_prov','f_cp','f_horarios','f_instr','f_calib','f_metod',
+     'f_fecha','f_hini','f_hfin','f_atmos','f_obs'].forEach(id=>{ document.getElementById(id).value=''; });
+    addSector();
+  }
+});
+
+if(!loadState()){
+  addSector();
+} else if(sectors.length===0){
+  addSector();
+}
+
+})();
+</script>
+</body>
+</html>

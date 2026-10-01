@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Relevamiento de Carga de Fuego - Dec. 351/79 Cap. 18</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+  :root{
+    --bg:#EEF2F5; --panel:#ffffff; --text:#1F2C36; --muted:#5B6B76;
+    --border:#D7DEE3; --accent:#FF6A00; --accent2:#FFA45C; --ok:#2F7A5C;
+    --warn:#B23B2E; --input-bg:#FBFCFD; --head-bg:#223949; --head-text:#ffffff;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#182229; --panel:#1F2C36; --text:#EAEEF1; --muted:#9AAAB4;
+      --border:#33424C; --accent:#FF8A3D; --accent2:#FFB57A; --ok:#6FBF9B;
+      --warn:#E08272; --input-bg:#152029; --head-bg:#101820; --head-text:#ffffff;
+    }
+  }
+  :root[data-theme="dark"]{
+    --bg:#182229; --panel:#1F2C36; --text:#EAEEF1; --muted:#9AAAB4;
+    --border:#33424C; --accent:#FF8A3D; --accent2:#FFB57A; --ok:#6FBF9B;
+    --warn:#E08272; --input-bg:#152029; --head-bg:#101820; --head-text:#ffffff;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; background:var(--bg); color:var(--text);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    line-height:1.45;
+  }
+  header{
+    background:var(--head-bg); color:var(--head-text); padding:20px 16px;
+  }
+  header h1{margin:0; font-size:1.25rem; font-weight:700;}
+  header p{margin:6px 0 0; font-size:0.85rem; opacity:0.8; max-width:760px;}
+  .wrap{max-width:820px; margin:0 auto; padding:16px;}
+  .panel{
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:16px; margin-bottom:16px;
+  }
+  .panel h2{margin:0 0 12px; font-size:1.02rem; border-bottom:1px solid var(--border); padding-bottom:8px;}
+  .panel h3{margin:14px 0 8px; font-size:0.92rem; color:var(--accent2);}
+  label{display:block; font-size:0.78rem; color:var(--muted); margin-bottom:3px; margin-top:10px;}
+  input[type=text], input[type=number], select, textarea{
+    width:100%; padding:8px 9px; border:1px solid var(--border); border-radius:6px;
+    background:var(--input-bg); color:var(--text); font-size:0.92rem;
+  }
+  .row{display:flex; gap:10px; flex-wrap:wrap;}
+  .row > div{flex:1; min-width:140px;}
+  button{
+    background:var(--accent); color:#fff; border:none; border-radius:6px;
+    padding:9px 14px; font-size:0.85rem; cursor:pointer; font-weight:600;
+  }
+  button.secondary{background:transparent; color:var(--accent); border:1px solid var(--accent);}
+  button.small{padding:5px 9px; font-size:0.75rem;}
+  button.danger{background:transparent; color:var(--warn); border:1px solid var(--warn);}
+  .sector{
+    border:1px solid var(--border); border-radius:8px; padding:12px; margin-bottom:14px;
+    background:var(--bg);
+  }
+  .sector-head{display:flex; justify-content:space-between; align-items:center; gap:8px;}
+  .sector-head input[type=text]{font-weight:700; font-size:1rem; border:none; background:transparent; padding:2px 0;}
+  table{width:100%; border-collapse:collapse; font-size:0.82rem; margin-top:6px;}
+  th,td{border:1px solid var(--border); padding:5px 6px; text-align:left; vertical-align:middle;}
+  th{background:var(--panel); color:var(--muted); font-weight:600; font-size:0.72rem; text-transform:uppercase;}
+  .mat-row select, .mat-row input{font-size:0.82rem; padding:5px 6px;}
+  .mat-actions{text-align:center; width:34px;}
+  .results{
+    margin-top:12px; background:var(--panel); border:1px dashed var(--border);
+    border-radius:8px; padding:10px 12px;
+  }
+  .results .big{font-size:1.5rem; font-weight:800; color:var(--accent);}
+  .results .label{font-size:0.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.02em;}
+  .grid2{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:8px;}
+  @media (max-width:480px){.grid2{grid-template-columns:1fr;}}
+  .kv{background:var(--bg); border:1px solid var(--border); border-radius:6px; padding:8px 10px;}
+  .kv .k{font-size:0.7rem; color:var(--muted); text-transform:uppercase;}
+  .kv .v{font-size:0.95rem; font-weight:700; margin-top:2px;}
+  .flag-np{color:var(--warn); font-weight:700;}
+  .note{font-size:0.76rem; color:var(--muted); margin-top:6px;}
+  .disclaimer{
+    font-size:0.78rem; color:var(--muted); background:var(--panel); border-left:3px solid var(--accent);
+    padding:10px 12px; border-radius:0 6px 6px 0; margin-bottom:16px;
+  }
+  .summary-table td, .summary-table th{font-size:0.8rem;}
+  .actions-bar{display:flex; gap:8px; flex-wrap:wrap; margin-top:14px;}
+  footer{text-align:center; font-size:0.72rem; color:var(--muted); padding:20px 16px 40px;}
+  @media print{
+    header, .no-print{display:none !important;}
+    body{background:#fff; color:#000;}
+    .panel{border:1px solid #999; break-inside:avoid;}
+    .sector{border:1px solid #999; break-inside:avoid;}
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Relevamiento de Carga de Fuego</h1>
+  <p>Decreto Reglamentario 351/79 (Ley 19.587) — Capítulo 18 y Anexo VII, Arts. 160 a 187. Herramienta de apoyo técnico: no reemplaza un estudio firmado por profesional matriculado.</p>
+</header>
+
+<div class="wrap">
+
+  <div class="disclaimer no-print">
+    <strong>Antes de usarla:</strong> el decreto define la carga de fuego (peso equivalente en madera por m², patrón 18,41 MJ/kg = 4.400 kcal/kg) y fija las tablas de riesgo, resistencia al fuego y potencial extintor — pero <strong>no tabula el poder calorífico de los materiales</strong>. Los valores de referencia que trae esta herramienta son orientativos (bibliografía técnica de uso habitual en el país); para un informe con validez legal, verificalos contra fuente técnica o ensayo, y hacé el relevamiento físico real del establecimiento. La firma la pone el profesional en higiene y seguridad matriculado.
+  </div>
+
+  <div class="panel">
+    <h2>Datos del establecimiento</h2>
+    <div class="row">
+      <div>
+        <label>Razón social / establecimiento</label>
+        <input type="text" id="estNombre" placeholder="Ej: Depósito Central S.A.">
+      </div>
+      <div>
+        <label>Domicilio</label>
+        <input type="text" id="estDireccion" placeholder="Calle, número, localidad">
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Responsable del relevamiento</label>
+        <input type="text" id="estResponsable" placeholder="Nombre y matrícula">
+      </div>
+      <div>
+        <label>Fecha</label>
+        <input type="text" id="estFecha">
+      </div>
+    </div>
+  </div>
+
+  <div id="sectores"></div>
+
+  <button id="btnAddSector" class="no-print">+ Agregar sector de incendio</button>
+
+  <div class="panel" id="resumenPanel" style="margin-top:18px;">
+    <h2>Resumen del establecimiento</h2>
+    <div id="resumenContenido"><p class="note">Agregá al menos un sector con materiales para ver el resumen.</p></div>
+  </div>
+
+  <div class="actions-bar no-print">
+    <button id="btnPrint" class="secondary">Imprimir (en este dispositivo)</button>
+    <button id="btnDownload" class="secondary" style="display:none;">Descargar informe (HTML)</button>
+    <button id="btnReset" class="danger">Borrar todo</button>
+  </div>
+  <p class="note no-print" id="downloadHint" style="display:none;">Si "Imprimir" no abre nada en tu dispositivo (pasa en algunos celulares), usá "Descargar informe": abrí ese archivo en el navegador y desde ahí imprimís o guardás como PDF.</p>
+
+  <p class="note no-print">Los datos quedan guardados en este navegador (no se comparten) mientras no borres todo.</p>
+
+</div>
+
+<footer>Basado en Anexo VII (arts. 160–187) del Decreto 351/79, reglamentario de la Ley 19.587 de Higiene y Seguridad en el Trabajo (Argentina).</footer>
+
+<script>
+(function(){
+"use strict";
+
+const PC_MADERA = 4400; // kcal/kg, patrón de referencia (18,41 MJ/kg)
+
+// Materiales de referencia (kcal/kg) - orientativos, editables por el usuario
+const MATERIALES_REF = [
+  {n:"Madera", pc:4400},
+  {n:"Papel / cartón", pc:4000},
+  {n:"Cartón impregnado bituminoso", pc:5000},
+  {n:"Algodón (hilados / telas)", pc:4000},
+  {n:"Lana", pc:4940},
+  {n:"Fibras sintéticas / poliéster", pc:6000},
+  {n:"Plásticos en general (PE, PP, ABS)", pc:10000},
+  {n:"PVC", pc:5000},
+  {n:"Caucho / goma", pc:10000},
+  {n:"Cuero", pc:4600},
+  {n:"Nafta / bencina", pc:10000},
+  {n:"Kerosene / gasoil", pc:10200},
+  {n:"Alcohol etílico", pc:6400},
+  {n:"Aceites / grasas", pc:9500},
+  {n:"Cereales / granos a granel", pc:4000},
+  {n:"Otro (personalizado)", pc:0}
+];
+
+// Tabla 2.1 - actividades y riesgos permitidos
+const ACTIVIDADES = [
+  {id:"residencial", label:"Residencial", permitidos:[3,4]},
+  {id:"admcomind", label:"Administrativo / Comercial / Industrial / Depósito", permitidos:[1,2,3,4,5,6,7]},
+  {id:"espcultura", label:"Espectáculos / Cultura", permitidos:[3,4]}
+];
+
+const RIESGOS = [
+  {v:1, label:"Riesgo 1 — Explosivo"},
+  {v:2, label:"Riesgo 2 — Inflamable"},
+  {v:3, label:"Riesgo 3 — Muy combustible"},
+  {v:4, label:"Riesgo 4 — Combustible"},
+  {v:5, label:"Riesgo 5 — Poco combustible"},
+  {v:6, label:"Riesgo 6 — Incombustible"},
+  {v:7, label:"Riesgo 7 — Refractario"}
+];
+
+// rangos de carga de fuego (kg/m2)
+const RANGOS = [
+  {max:15, label:"Hasta 15 kg/m²"},
+  {max:30, label:"16 a 30 kg/m²"},
+  {max:60, label:"31 a 60 kg/m²"},
+  {max:100, label:"61 a 100 kg/m²"},
+  {max:Infinity, label:"Más de 100 kg/m²"}
+];
+function rangoIndex(qf){
+  for(let i=0;i<RANGOS.length;i++){ if(qf<=RANGOS[i].max) return i; }
+  return RANGOS.length-1;
+}
+
+// Cuadro 2.2.1 - Resistencia al fuego, ventilación NATURAL (riesgo 1..5)
+const CUADRO_221 = [
+  [null,"F 60","F 30","F 30",null],
+  [null,"F 90","F 60","F 30","F 30"],
+  [null,"F 120","F 90","F 60","F 30"],
+  [null,"F 180","F 120","F 90","F 60"],
+  [null,"F 180","F 180","F 120","F 90"]
+];
+// Cuadro 2.2.2 - Resistencia al fuego, ventilación MECÁNICA (riesgo 1..5)
+const CUADRO_222 = [
+  [null,"NP","F 60","F 60","F 30"],
+  [null,"NP","F 90","F 60","F 60"],
+  [null,"NP","F 120","F 90","F 60"],
+  [null,"NP","F 180","F 120","F 90"],
+  [null,"NP","NP","F 180","F 120"]
+];
+// Tabla 1 - Potencial extintor clase A (riesgo 1..5)
+const TABLA_1A = [
+  [null,null,"1 A","1 A","1 A"],
+  [null,null,"2 A","1 A","1 A"],
+  [null,null,"3 A","2 A","1 A"],
+  [null,null,"6 A","4 A","3 A"],
+  ["A determinar en cada caso","A determinar en cada caso","A determinar en cada caso","A determinar en cada caso","A determinar en cada caso"]
+];
+// Tabla 2 - Potencial extintor clase B (riesgo 1..5)
+const TABLA_2B = [
+  [null,"6 B","4 B",null,null],
+  [null,"8 B","6 B",null,null],
+  [null,"10 B","8 B",null,null],
+  [null,"20 B","10 B",null,null],
+  ["A determinar en cada caso","A determinar en cada caso","A determinar en cada caso","A determinar en cada caso","A determinar en cada caso"]
+];
+
+let sectorCount = 0;
+let sectores = []; // {id, el}
+
+function uid(){ return 's'+(++sectorCount)+'_'+Math.random().toString(36).slice(2,7); }
+function fmt(n){ return (Math.round(n*100)/100).toLocaleString('es-AR'); }
+
+function materialOptionsHtml(selected){
+  return MATERIALES_REF.map((m,i)=>`<option value="${i}" ${selected==i?'selected':''}>${m.n}</option>`).join('');
+}
+function actividadOptionsHtml(selected){
+  return ACTIVIDADES.map(a=>`<option value="${a.id}" ${selected===a.id?'selected':''}>${a.label}</option>`).join('');
+}
+function riesgoOptionsHtml(selected){
+  return RIESGOS.map(r=>`<option value="${r.v}" ${String(selected)===String(r.v)?'selected':''}>${r.label}</option>`).join('');
+}
+
+function sectorTemplate(data){
+  data = data || {};
+  const id = data.id || uid();
+  return `
+  <div class="sector" data-id="${id}">
+    <div class="sector-head">
+      <input type="text" class="sec-nombre" placeholder="Nombre del sector (Ej: Depósito planta baja)" value="${data.nombre||''}">
+      <button class="danger small btn-del-sector no-print">Quitar</button>
+    </div>
+    <div class="row">
+      <div>
+        <label>Superficie del sector (m²)</label>
+        <input type="number" class="sec-sup" min="0" step="0.01" value="${data.sup||''}">
+      </div>
+      <div>
+        <label>Ventilación</label>
+        <select class="sec-vent">
+          <option value="natural" ${data.vent==='natural'||!data.vent?'selected':''}>Natural</option>
+          <option value="mecanica" ${data.vent==='mecanica'?'selected':''}>Mecánica</option>
+        </select>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label>Actividad predominante (Tabla 2.1)</label>
+        <select class="sec-actividad">${actividadOptionsHtml(data.actividad||'admcomind')}</select>
+      </div>
+      <div>
+        <label>Riesgo del sector (según clasificación de materiales, 1.5)</label>
+        <select class="sec-riesgo">${riesgoOptionsHtml(data.riesgo||3)}</select>
+      </div>
+    </div>
+    <div class="sec-np-warning flag-np" style="display:none; margin-top:6px; font-size:0.8rem;"></div>
+
+    <h3>Materiales combustibles del sector</h3>
+    <table>
+      <thead>
+        <tr><th>Material</th><th>Peso (kg)</th><th>P.C. (kcal/kg)</th><th>Nombre personalizado</th><th></th></tr>
+      </thead>
+      <tbody class="sec-materiales"></tbody>
+    </table>
+    <button class="secondary small btn-add-mat no-print" style="margin-top:8px;">+ Agregar material</button>
+
+    <div class="results">
+      <div class="label">Carga de fuego (Qf)</div>
+      <div class="big sec-qf">—</div>
+      <div class="grid2">
+        <div class="kv"><div class="k">Resistencia al fuego (F)</div><div class="v sec-f">—</div></div>
+        <div class="kv"><div class="k">Potencial extintor Clase A</div><div class="v sec-pota">—</div></div>
+        <div class="kv"><div class="k">Potencial extintor Clase B</div><div class="v sec-potb">—</div></div>
+        <div class="kv"><div class="k">Matafuegos mínimos (Art. 7.1.1)</div><div class="v sec-mataf">—</div></div>
+      </div>
+      <p class="note">Matafuegos: 1 cada 200 m² o fracción, con potencial mínimo 1A y 5BC en cada piso (Art. 7.1.1); se ajusta al mayor potencial que exija Tabla 1/2 según carga de fuego y riesgo.</p>
+    </div>
+  </div>`;
+}
+
+function matRowTemplate(data){
+  data = data || {};
+  const matIdx = data.matIdx!==undefined ? data.matIdx : 0;
+  const pc = data.pc!==undefined ? data.pc : MATERIALES_REF[0].pc;
+  return `
+  <tr class="mat-row">
+    <td><select class="mat-select">${materialOptionsHtml(matIdx)}</select></td>
+    <td><input type="number" class="mat-peso" min="0" step="0.01" value="${data.peso||''}" placeholder="kg"></td>
+    <td><input type="number" class="mat-pc" min="0" step="1" value="${pc}"></td>
+    <td><input type="text" class="mat-custom" placeholder="si es 'Otro'" value="${data.custom||''}" style="${matIdx==(MATERIALES_REF.length-1)?'':'display:none;'}"></td>
+    <td class="mat-actions"><button class="danger small btn-del-mat no-print">✕</button></td>
+  </tr>`;
+}
+
+function addSector(data){
+  const wrap = document.getElementById('sectores');
+  const div = document.createElement('div');
+  div.innerHTML = sectorTemplate(data);
+  const sectorEl = div.firstElementChild;
+  wrap.appendChild(sectorEl);
+  wireSector(sectorEl);
+  const mats = (data && data.materiales) || [{}];
+  mats.forEach(m=> addMaterial(sectorEl, m));
+  recalcAll();
+}
+
+function addMaterial(sectorEl, data){
+  const tbody = sectorEl.querySelector('.sec-materiales');
+  const tr = document.createElement('tr');
+  tr.outerHTML = matRowTemplate(data);
+  const newRow = tbody.lastElementChild ? null : null;
+  tbody.insertAdjacentHTML('beforeend', matRowTemplate(data));
+  const row = tbody.lastElementChild;
+  wireMatRow(row, sectorEl);
+  recalcAll();
+}
+
+function wireMatRow(row, sectorEl){
+  const sel = row.querySelector('.mat-select');
+  const pcInput = row.querySelector('.mat-pc');
+  const customInput = row.querySelector('.mat-custom');
+  sel.addEventListener('change', ()=>{
+    const idx = parseInt(sel.value,10);
+    pcInput.value = MATERIALES_REF[idx].pc;
+    customInput.style.display = (idx === MATERIALES_REF.length-1) ? '' : 'none';
+    recalcAll();
+  });
+  [pcInput, row.querySelector('.mat-peso'), customInput].forEach(inp=>{
+    inp.addEventListener('input', recalcAll);
+  });
+  row.querySelector('.btn-del-mat').addEventListener('click', ()=>{
+    row.remove();
+    recalcAll();
+  });
+}
+
+function wireSector(sectorEl){
+  sectorEl.querySelector('.btn-del-sector').addEventListener('click', ()=>{
+    sectorEl.remove();
+    recalcAll();
+  });
+  sectorEl.querySelector('.btn-add-mat').addEventListener('click', ()=>{
+    addMaterial(sectorEl, {});
+  });
+  ['.sec-nombre','.sec-sup','.sec-vent','.sec-actividad','.sec-riesgo'].forEach(sel=>{
+    sectorEl.querySelector(sel).addEventListener('input', recalcAll);
+    sectorEl.querySelector(sel).addEventListener('change', recalcAll);
+  });
+}
+
+function lookupTabla(tabla, rIdx, riesgo){
+  // riesgo 1..5 -> columna 0..4 ; riesgo 6/7 no tabulado
+  if(riesgo<1 || riesgo>5) return "Sin requisito tabulado (riesgo 6/7)";
+  const val = tabla[rIdx][riesgo-1];
+  return val===null ? "No corresponde (—)" : val;
+}
+
+function calcSector(sectorEl){
+  const sup = parseFloat(sectorEl.querySelector('.sec-sup').value) || 0;
+  const vent = sectorEl.querySelector('.sec-vent').value;
+  const actividadId = sectorEl.querySelector('.sec-actividad').value;
+  const riesgo = parseInt(sectorEl.querySelector('.sec-riesgo').value,10);
+
+  let sumaCal = 0; // kcal
+  let pesoTotal = 0;
+  sectorEl.querySelectorAll('.mat-row').forEach(row=>{
+    const peso = parseFloat(row.querySelector('.mat-peso').value) || 0;
+    const pc = parseFloat(row.querySelector('.mat-pc').value) || 0;
+    sumaCal += peso*pc;
+    pesoTotal += peso;
+  });
+
+  const qf = sup>0 ? sumaCal/(sup*PC_MADERA) : 0;
+  const rIdx = rangoIndex(qf);
+
+  // validar permitido según actividad
+  const actividad = ACTIVIDADES.find(a=>a.id===actividadId);
+  const permitido = actividad ? actividad.permitidos.includes(riesgo) : true;
+
+  const warnEl = sectorEl.querySelector('.sec-np-warning');
+  if(!permitido){
+    warnEl.style.display = 'block';
+    warnEl.textContent = `⚠ Según Tabla 2.1, el uso "${actividad.label}" no admite Riesgo ${riesgo} (No Permitido). Revisar clasificación de materiales o uso del sector.`;
+  } else {
+    warnEl.style.display = 'none';
+  }
+
+  const cuadro = vent==='natural' ? CUADRO_221 : CUADRO_222;
+  const f = lookupTabla(cuadro, rIdx, riesgo);
+  const potA = lookupTabla(TABLA_1A, rIdx, riesgo);
+  const potB = lookupTabla(TABLA_2B, rIdx, riesgo);
+
+  const matafBySup = sup>0 ? Math.ceil(sup/200) : 0;
+
+  sectorEl.querySelector('.sec-qf').textContent = sup>0 ? fmt(qf)+" kg/m²" : "— (indicar superficie)";
+  sectorEl.querySelector('.sec-f').textContent = sup>0 ? f : "—";
+  sectorEl.querySelector('.sec-pota').textContent = sup>0 ? potA : "—";
+  sectorEl.querySelector('.sec-potb').textContent = sup>0 ? potB : "—";
+  sectorEl.querySelector('.sec-mataf').textContent = sup>0 ? (matafBySup + " unid. (mín. 1A y 5BC c/u)") : "—";
+
+  return {
+    nombre: sectorEl.querySelector('.sec-nombre').value || '(sin nombre)',
+    sup, vent, actividad: actividad?actividad.label:actividadId, riesgo, permitido,
+    qf, rangoLabel: RANGOS[rIdx].label, f, potA, potB, matafBySup
+  };
+}
+
+function recalcAll(){
+  const resultados = [];
+  document.querySelectorAll('.sector').forEach(sectorEl=>{
+    resultados.push(calcSector(sectorEl));
+  });
+  renderResumen(resultados);
+  saveState();
+}
+
+function renderResumen(resultados){
+  const el = document.getElementById('resumenContenido');
+  if(resultados.length===0){
+    el.innerHTML = '<p class="note">Agregá al menos un sector con materiales para ver el resumen.</p>';
+    return;
+  }
+  const supTotal = resultados.reduce((a,r)=>a+r.sup,0);
+  const mataftotal = resultados.reduce((a,r)=>a+r.matafBySup,0);
+  const hayNP = resultados.some(r=>!r.permitido);
+
+  let rows = resultados.map(r=>`
+    <tr>
+      <td>${r.nombre}</td>
+      <td>${fmt(r.sup)}</td>
+      <td>${r.sup>0?fmt(r.qf):'—'} kg/m²</td>
+      <td>Riesgo ${r.riesgo}${r.permitido?'':' ⚠ NP'}</td>
+      <td>${r.f}</td>
+      <td>${r.potA}</td>
+      <td>${r.potB}</td>
+    </tr>`).join('');
+
+  el.innerHTML = `
+    <div class="grid2">
+      <div class="kv"><div class="k">Superficie total relevada</div><div class="v">${fmt(supTotal)} m²</div></div>
+      <div class="kv"><div class="k">Matafuegos mínimos (por superficie, Art. 7.1.1)</div><div class="v">${mataftotal} unid.</div></div>
+    </div>
+    ${hayNP ? '<p class="flag-np" style="margin-top:10px;">⚠ Hay al menos un sector con combinación uso/riesgo No Permitida según Tabla 2.1. Revisar antes de cerrar el informe.</p>' : ''}
+    <table class="summary-table" style="margin-top:10px;">
+      <thead><tr><th>Sector</th><th>Sup. (m²)</th><th>Carga de fuego</th><th>Riesgo</th><th>Resist. al fuego (F)</th><th>Potencial A</th><th>Potencial B</th></tr></thead>
+      <tbody>${rows}</tbody>
+    </table>
+    <p class="note">El potencial extintor y la resistencia al fuego mostrados por sector son el mínimo exigido por Tablas 1, 2 y Cuadros 2.2.1/2.2.2 según el rango de carga de fuego (${RANGOS.map(r=>r.label).join(' / ')}) y el riesgo asignado. La cantidad final de matafuegos surge del mayor valor entre el criterio de superficie (Art. 7.1.1) y el potencial exigido por carga de fuego.</p>
+  `;
+}
+
+// --- Persistencia local (por navegador) ---
+function saveState(){
+  try{
+    const state = {
+      estNombre: document.getElementById('estNombre').value,
+      estDireccion: document.getElementById('estDireccion').value,
+      estResponsable: document.getElementById('estResponsable').value,
+      estFecha: document.getElementById('estFecha').value,
+      sectores: []
+    };
+    document.querySelectorAll('.sector').forEach(sectorEl=>{
+      const materiales = [];
+      sectorEl.querySelectorAll('.mat-row').forEach(row=>{
+        materiales.push({
+          matIdx: parseInt(row.querySelector('.mat-select').value,10),
+          peso: row.querySelector('.mat-peso').value,
+          pc: row.querySelector('.mat-pc').value,
+          custom: row.querySelector('.mat-custom').value
+        });
+      });
+      state.sectores.push({
+        nombre: sectorEl.querySelector('.sec-nombre').value,
+        sup: sectorEl.querySelector('.sec-sup').value,
+        vent: sectorEl.querySelector('.sec-vent').value,
+        actividad: sectorEl.querySelector('.sec-actividad').value,
+        riesgo: sectorEl.querySelector('.sec-riesgo').value,
+        materiales
+      });
+    });
+    localStorage.setItem('cargaFuegoState', JSON.stringify(state));
+  }catch(e){ /* almacenamiento no disponible, se continúa sin persistencia */ }
+}
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem('cargaFuegoState');
+    if(!raw) return false;
+    const state = JSON.parse(raw);
+    document.getElementById('estNombre').value = state.estNombre||'';
+    document.getElementById('estDireccion').value = state.estDireccion||'';
+    document.getElementById('estResponsable').value = state.estResponsable||'';
+    document.getElementById('estFecha').value = state.estFecha||'';
+    (state.sectores||[]).forEach(s=> addSector(s));
+    return true;
+  }catch(e){ return false; }
+}
+
+function escapeHtml(s){
+  return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function buildReportHtml(){
+  const nombre = document.getElementById('estNombre').value || '(sin nombre)';
+  const direccion = document.getElementById('estDireccion').value || '';
+  const responsable = document.getElementById('estResponsable').value || '';
+  const fecha = document.getElementById('estFecha').value || '';
+
+  let sectoresHtml = '';
+  document.querySelectorAll('.sector').forEach(sectorEl=>{
+    const nombreSec = sectorEl.querySelector('.sec-nombre').value || '(sin nombre)';
+    const sup = sectorEl.querySelector('.sec-sup').value || '—';
+    const vent = sectorEl.querySelector('.sec-vent').value === 'natural' ? 'Natural' : 'Mecánica';
+    const actividadSel = sectorEl.querySelector('.sec-actividad');
+    const actividad = actividadSel.options[actividadSel.selectedIndex].text;
+    const riesgoSel = sectorEl.querySelector('.sec-riesgo');
+    const riesgo = riesgoSel.options[riesgoSel.selectedIndex].text;
+    const qf = sectorEl.querySelector('.sec-qf').textContent;
+    const f = sectorEl.querySelector('.sec-f').textContent;
+    const potA = sectorEl.querySelector('.sec-pota').textContent;
+    const potB = sectorEl.querySelector('.sec-potb').textContent;
+    const mataf = sectorEl.querySelector('.sec-mataf').textContent;
+
+    let matRows = '';
+    sectorEl.querySelectorAll('.mat-row').forEach(row=>{
+      const sel = row.querySelector('.mat-select');
+      let matNombre = sel.options[sel.selectedIndex].text;
+      const custom = row.querySelector('.mat-custom').value;
+      if(custom) matNombre = custom;
+      const peso = row.querySelector('.mat-peso').value || '0';
+      const pc = row.querySelector('.mat-pc').value || '0';
+      matRows += `<tr><td style="border:1px solid #999;padding:4px;">${escapeHtml(matNombre)}</td><td style="border:1px solid #999;padding:4px;">${peso}</td><td style="border:1px solid #999;padding:4px;">${pc}</td></tr>`;
+    });
+
+    sectoresHtml += `
+      <div style="border:1px solid #999;border-radius:6px;padding:12px;margin-bottom:14px;">
+        <h3 style="margin:0 0 8px;">${escapeHtml(nombreSec)}</h3>
+        <p style="font-size:0.85rem;margin:2px 0;">Superficie: ${sup} m² | Ventilación: ${vent} | Actividad: ${escapeHtml(actividad)} | ${escapeHtml(riesgo)}</p>
+        <table style="width:100%;border-collapse:collapse;font-size:0.82rem;margin:8px 0;">
+          <thead><tr><th style="border:1px solid #999;padding:4px;text-align:left;">Material</th><th style="border:1px solid #999;padding:4px;text-align:left;">Peso (kg)</th><th style="border:1px solid #999;padding:4px;text-align:left;">P.C. (kcal/kg)</th></tr></thead>
+          <tbody>${matRows}</tbody>
+        </table>
+        <table style="width:100%;border-collapse:collapse;font-size:0.85rem;">
+          <tr><td style="border:1px solid #999;padding:4px;"><strong>Carga de fuego (Qf)</strong></td><td style="border:1px solid #999;padding:4px;">${qf}</td></tr>
+          <tr><td style="border:1px solid #999;padding:4px;"><strong>Resistencia al fuego (F)</strong></td><td style="border:1px solid #999;padding:4px;">${f}</td></tr>
+          <tr><td style="border:1px solid #999;padding:4px;"><strong>Potencial extintor Clase A</strong></td><td style="border:1px solid #999;padding:4px;">${potA}</td></tr>
+          <tr><td style="border:1px solid #999;padding:4px;"><strong>Potencial extintor Clase B</strong></td><td style="border:1px solid #999;padding:4px;">${potB}</td></tr>
+          <tr><td style="border:1px solid #999;padding:4px;"><strong>Matafuegos mínimos</strong></td><td style="border:1px solid #999;padding:4px;">${mataf}</td></tr>
+        </table>
+      </div>`;
+  });
+
+  const resumenHtml = document.getElementById('resumenContenido').innerHTML;
+
+  return `<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><title>Informe de Carga de Fuego - ${escapeHtml(nombre)}</title>
+<style>
+  body{font-family:Arial,Helvetica,sans-serif;color:#1f2420;padding:24px;max-width:820px;margin:0 auto;}
+  h1{font-size:1.3rem;border-bottom:2px solid #b5432b;padding-bottom:8px;}
+  table{border-collapse:collapse;}
+</style>
+</head><body>
+  <h1>Informe de Carga de Fuego</h1>
+  <p><strong>Establecimiento:</strong> ${escapeHtml(nombre)}<br>
+  <strong>Domicilio:</strong> ${escapeHtml(direccion)}<br>
+  <strong>Responsable:</strong> ${escapeHtml(responsable)}<br>
+  <strong>Fecha:</strong> ${escapeHtml(fecha)}</p>
+  <h2>Sectores de incendio</h2>
+  ${sectoresHtml}
+  <h2>Resumen del establecimiento</h2>
+  ${resumenHtml}
+</body></html>`;
+}
+
+let downloadsCap = null;
+(async function initCapabilities(){
+  try{
+    if(window.claude && typeof window.claude.use === 'function'){
+      downloadsCap = await window.claude.use('downloads');
+      if(downloadsCap){
+        document.getElementById('btnDownload').style.display = '';
+        document.getElementById('downloadHint').style.display = '';
+      }
+    }
+  }catch(e){ /* capacidad no disponible en este visor */ }
+})();
+
+document.getElementById('btnDownload').addEventListener('click', async ()=>{
+  if(!downloadsCap) return;
+  try{
+    const html = buildReportHtml();
+    await downloadsCap.save({filename: 'informe_carga_de_fuego.html', data: html});
+  }catch(e){
+    alert('No se pudo generar la descarga en este momento. Probá con "Imprimir".');
+  }
+});
+
+document.getElementById('btnAddSector').addEventListener('click', ()=> addSector({}));
+document.getElementById('btnPrint').addEventListener('click', ()=> window.print());
+document.getElementById('btnReset').addEventListener('click', ()=>{
+  if(confirm('¿Borrar todos los datos cargados?')){
+    try{ localStorage.removeItem('cargaFuegoState'); }catch(e){}
+    document.getElementById('sectores').innerHTML='';
+    document.getElementById('estNombre').value='';
+    document.getElementById('estDireccion').value='';
+    document.getElementById('estResponsable').value='';
+    document.getElementById('estFecha').value='';
+    recalcAll();
+  }
+});
+['estNombre','estDireccion','estResponsable','estFecha'].forEach(id=>{
+  document.getElementById(id).addEventListener('input', saveState);
+});
+
+// init
+(function init(){
+  const hoy = new Date();
+  document.getElementById('estFecha').value = hoy.toLocaleDateString('es-AR');
+  const loaded = loadState();
+  if(!loaded){ addSector({}); }
+  recalcAll();
+})();
+
+})();
+</script>
+</body>
+</html>
