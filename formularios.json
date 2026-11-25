@@ -1,0 +1,1081 @@
+{
+ "app": {
+  "titulo": "Formularios QHSE",
+  "sub": "Lic. Cavilla · Gestión integral QHSE",
+  "version": 1
+ },
+ "formularios": [
+  {
+   "id": "iper",
+   "codigo": "001",
+   "corto": "IPER",
+   "titulo": "Inventario de peligros y evaluación de riesgos",
+   "descripcion": "En este formulario se van a cargar los riesgos que detectamos en las distintas tareas que se realizan dentro de la compañia.",
+   "destino": {
+    "form": "001 - I.P.E.R. - AP",
+    "hoja": "Respuestas de formulario 1"
+   },
+   "repetir": {
+    "texto": "Cargar otro peligro de la misma tarea",
+    "claves": [
+     "FECHA",
+     "SECTOR",
+     "PUESTO",
+     "TAREA"
+    ],
+    "irA": "p-peligro-identificado"
+   },
+   "paginas": [
+    {
+     "id": "p-informacion-inicial",
+     "titulo": "INFORMACION INICIAL",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "FECHA",
+       "col": "FECHA",
+       "etiqueta": "FECHA",
+       "tipo": "fecha",
+       "req": true
+      },
+      {
+       "k": "SECTOR",
+       "col": "SECTOR",
+       "etiqueta": "SECTOR",
+       "tipo": "lista",
+       "req": true,
+       "opciones": [
+        {
+         "t": "ADMINISTRACION"
+        },
+        {
+         "t": "Producción"
+        },
+        {
+         "t": "Deposito MP"
+        },
+        {
+         "t": "Deposito PF"
+        },
+        {
+         "t": "General"
+        },
+        {
+         "t": "Limpieza"
+        }
+       ]
+      },
+      {
+       "k": "PUESTO",
+       "col": "PUESTO",
+       "etiqueta": "PUESTO",
+       "tipo": "lista",
+       "req": true,
+       "opciones": [
+        {
+         "t": "ADMINISTRATIVA"
+        },
+        {
+         "t": "Enpaquetado"
+        },
+        {
+         "t": "Operador de Autoelevador"
+        },
+        {
+         "t": "Personal de depósito"
+        },
+        {
+         "t": "Mantenimiento"
+        },
+        {
+         "t": "Trabajos en Silos"
+        }
+       ]
+      },
+      {
+       "k": "TAREA",
+       "col": "TAREA",
+       "etiqueta": "TAREA",
+       "tipo": "texto",
+       "req": true
+      }
+     ]
+    },
+    {
+     "id": "p-peligro-identificado",
+     "titulo": "PELIGRO IDENTIFICADO",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "Peligro identificado",
+       "col": "Peligro identificado",
+       "etiqueta": "Peligro identificado",
+       "tipo": "varias",
+       "req": true,
+       "opciones": [
+        "Caida a nivel",
+        "Caida en altura (2 mts o mas)",
+        "Corte",
+        "Golpes",
+        "Proyeccion de particulas"
+       ],
+       "otro": true
+      },
+      {
+       "k": "Fuente del peligro / Situacion peligrosa",
+       "col": "Fuente del peligro / Situacion peligrosa",
+       "etiqueta": "Fuente del peligro / Situacion peligrosa",
+       "tipo": "parrafo",
+       "req": true
+      },
+      {
+       "k": "Probabilidad de ocurrencia",
+       "col": "Probabilidad de ocurrencia",
+       "etiqueta": "Probabilidad de ocurrencia",
+       "tipo": "una",
+       "req": true,
+       "opciones": [
+        {
+         "t": "NULA - No es probable que suceda"
+        },
+        {
+         "t": "MUY BAJA - Sucedió una vez en el último año en el rubro"
+        },
+        {
+         "t": "BAJA - Sucedió una vez en el último año en la firma"
+        },
+        {
+         "t": "MEDIA - Sucedio una vez en el ultimo mes en la firma"
+        },
+        {
+         "t": "ALTA - Sucedió una vez en la ultima semana en la firma"
+        },
+        {
+         "t": "MUY ALTA - Sucedio una vez en las ultimas 72 hs en la firma"
+        }
+       ]
+      },
+      {
+       "k": "Posible Consecuencia",
+       "col": "Posible Consecuencia",
+       "etiqueta": "Posible Consecuencia",
+       "tipo": "una",
+       "req": true,
+       "opciones": [
+        {
+         "t": "MUY LEVE - No genera lesiones en las personas ni daño al medio ambiente"
+        },
+        {
+         "t": "LEVE - Puede generar lesiones superficiales pero no daño al medio ambiente"
+        },
+        {
+         "t": "MEDIO - Puede generar lesiones leves en el trabajador y derrame al medio ambiente"
+        },
+        {
+         "t": "SEVERA - Puede generar lesiones severas no permanente en el trabajador"
+        },
+        {
+         "t": "MUY SEVERA - Puede generar lesiones severas permanentes en el trabajador"
+        },
+        {
+         "t": "FATAL - Puede causar la muerte del trabajador"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "p-controles-existentes-propuestos",
+     "titulo": "CONTROLES EXISTENTES/PROPUESTOS",
+     "ayuda": "Controles que ya se implementaron para prevenir los riesgos en las tareas, o aquellos que se van a proponer para el mismo fin.",
+     "preguntas": [
+      {
+       "k": "TIPO DE CONTROL",
+       "col": "TIPO DE CONTROL",
+       "etiqueta": "TIPO DE CONTROL",
+       "tipo": "varias",
+       "req": true,
+       "opciones": [
+        "Eliminación",
+        "Sustitución",
+        "Ingeniería",
+        "Administrativo",
+        "EPP"
+       ],
+       "otro": true
+      },
+      {
+       "k": "MEDIDAS DE INGENIERIA PROPUESTAS",
+       "col": "MEDIDAS DE INGENIERIA PROPUESTAS",
+       "etiqueta": "MEDIDAS DE INGENIERIA PROPUESTAS",
+       "tipo": "texto",
+       "req": false,
+       "ayuda": "POR EJEMPLO: Protecciones físicas, Sistemas de enclavamiento, Extracción localizada."
+      },
+      {
+       "k": "MEDIDAS ADMINISTRATIVAS PROPUESTAS",
+       "col": "MEDIDAS ADMINISTRATIVAS PROPUESTAS",
+       "etiqueta": "MEDIDAS ADMINISTRATIVAS PROPUESTAS",
+       "tipo": "texto",
+       "req": true,
+       "ayuda": "POR EJEMPLO: Procedimientos, Permisos de trabajo, Capacitación, Inspecciones, Supervisión."
+      },
+      {
+       "k": "ELEMENTOS DE PROTECCION PERSONAL A UTILIZAR",
+       "col": "ELEMENTOS DE PROTECCION PERSONAL A UTILIZAR",
+       "etiqueta": "ELEMENTOS DE PROTECCION PERSONAL A UTILIZAR",
+       "tipo": "varias",
+       "req": true,
+       "opciones": [
+        "PROTECCION CRANEANA",
+        "PROTECCION VISUAL",
+        "PROTECCION AUDITIVA",
+        "GUANTES",
+        "ZAPATOS DE SEGURIDAD",
+        "ROPA DE TRABAJO",
+        "NO APLICA"
+       ],
+       "otro": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "inspeccion",
+   "codigo": "002",
+   "corto": "Inspección",
+   "titulo": "Inspección QHSE",
+   "descripcion": "",
+   "destino": {
+    "form": "002 - INSPECCION QHSE - AP",
+    "hoja": "Respuestas de formulario 4"
+   },
+   "repetir": {
+    "texto": "Cargar otro hallazgo",
+    "claves": [
+     "FECHA",
+     "ESTABLECIMIENTO",
+     "SECTOR"
+    ],
+    "irA": "p-inicio"
+   },
+   "paginas": [
+    {
+     "id": "p-inicio",
+     "titulo": "Datos de la inspección",
+     "preguntas": [
+      {
+       "k": "FECHA",
+       "col": "FECHA",
+       "etiqueta": "FECHA",
+       "tipo": "fecha",
+       "req": true
+      },
+      {
+       "k": "ESTABLECIMIENTO",
+       "col": "ESTABLECIMIENTO",
+       "etiqueta": "ESTABLECIMIENTO",
+       "tipo": "lista",
+       "req": true,
+       "opciones": [
+        {
+         "t": "PLANTA"
+        }
+       ]
+      },
+      {
+       "k": "SECTOR",
+       "col": "SECTOR",
+       "etiqueta": "SECTOR",
+       "tipo": "lista",
+       "req": true,
+       "opciones": [
+        {
+         "t": "Mantenimiento"
+        },
+        {
+         "t": "Deposito"
+        },
+        {
+         "t": "Administracion"
+        },
+        {
+         "t": "Produccion"
+        },
+        {
+         "t": "Parque externo"
+        },
+        {
+         "t": "General"
+        }
+       ]
+      },
+      {
+       "k": "ORIGEN DEL HALLAZGO",
+       "col": "ORIGEN DEL HALLAZGO",
+       "etiqueta": "ORIGEN DEL HALLAZGO",
+       "tipo": "una",
+       "req": true,
+       "opciones": [
+        {
+         "t": "INSPECCIONES INTERNAS",
+         "ir": "p-categoria-del-hallazgo"
+        },
+        {
+         "t": "INSPECCIONES EXTERNAS",
+         "ir": "p-hallazgos-y-evidencia"
+        },
+        {
+         "t": "INCIDENTES / ACCIDENTES",
+         "ir": "p-hallazgos-y-evidencia"
+        },
+        {
+         "t": "AUDITORIA EXTERNA",
+         "ir": "p-hallazgos-y-evidencia"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "p-categoria-del-hallazgo",
+     "titulo": "CATEGORIA DEL HALLAZGO",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "CATEGORIA",
+       "col": "CATEGORIA",
+       "etiqueta": "CATEGORIA",
+       "tipo": "una",
+       "req": true,
+       "opciones": [
+        {
+         "t": "Instalaciones y Espacios",
+         "ir": "p-1-instalaciones-y-espacios"
+        },
+        {
+         "t": "Servicios Sanitarios",
+         "ir": "p-2-servicios-sanitarios"
+        },
+        {
+         "t": "Máquinas y Equipos",
+         "ir": "p-3-maquinas-y-equipos"
+        },
+        {
+         "t": "Riesgo Eléctrico",
+         "ir": "p-4-riesgo-electrico"
+        },
+        {
+         "t": "Protección Incendios",
+         "ir": "p-5-proteccion-incendios"
+        },
+        {
+         "t": "Ergonomía y Ambiente",
+         "ir": "p-6-ergonomia-y-ambiente"
+        },
+        {
+         "t": "Sustancias Químicas",
+         "ir": "p-7-sustancias-quimicas"
+        },
+        {
+         "t": "EPP y Capacitación",
+         "ir": "p-8-epp-y-capacitacion"
+        },
+        {
+         "t": "Orden y Limpieza",
+         "ir": "p-9-orden-y-limpieza"
+        }
+       ],
+       "otro": true,
+       "otroIr": "p-hallazgos-y-evidencia"
+      }
+     ]
+    },
+    {
+     "id": "p-1-instalaciones-y-espacios",
+     "titulo": "1. Instalaciones y Espacios",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "SUBCATEGORIA#1",
+       "col": "SUBCATEGORIA#1",
+       "etiqueta": "Subcategoría (marcá a cuál corresponde el hallazgo)",
+       "tipo": "una",
+       "req": false,
+       "opciones": [
+        {
+         "t": "¿Los edificios y estructuras ofrecen condiciones de seguridad y estabilidad?"
+        },
+        {
+         "t": "¿Los lugares de trabajo se mantienen limpios, ordenados y en condiciones higiénicas?"
+        },
+        {
+         "t": "¿Las vías de circulación, pasillos y salidas de emergencia están despejadas y señalizadas?"
+        },
+        {
+         "t": "¿Existe una separación adecuada entre máquinas y equipos para el tránsito seguro?"
+        }
+       ]
+      }
+     ],
+     "fin": "p-hallazgos-y-evidencia"
+    },
+    {
+     "id": "p-2-servicios-sanitarios",
+     "titulo": "2. Servicios Sanitarios",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "SUBCATEGORIA#2",
+       "col": "SUBCATEGORIA#2",
+       "etiqueta": "Subcategoría (marcá a cuál corresponde el hallazgo)",
+       "tipo": "una",
+       "req": false,
+       "opciones": [
+        {
+         "t": "¿Los sanitarios están limpios, desinfectados, iluminados y ventilados?"
+        },
+        {
+         "t": "¿Se cuenta con vestuarios provistos de armarios individuales (y dobles si aplica)?"
+        },
+        {
+         "t": "¿Se provee agua potable para consumo humano suficiente y en condiciones higiénicas?"
+        },
+        {
+         "t": "¿Existe comedor o espacio adecuado separado de la zona de trabajo?"
+        }
+       ]
+      }
+     ],
+     "fin": "p-hallazgos-y-evidencia"
+    },
+    {
+     "id": "p-3-maquinas-y-equipos",
+     "titulo": "3. Máquinas y Equipos",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "SUBCATEGORIA#3",
+       "col": "SUBCATEGORIA#3",
+       "etiqueta": "Subcategoría (marcá a cuál corresponde el hallazgo)",
+       "tipo": "una",
+       "req": false,
+       "opciones": [
+        {
+         "t": "¿Las máquinas poseen protecciones, resguardos o dispositivos de seguridad en partes móviles?"
+        },
+        {
+         "t": "¿Las herramientas manuales y portátiles se encuentran en buen estado de conservación?"
+        },
+        {
+         "t": "¿Los aparatos para izar, ascensores y montacargas poseen señalización de carga y mantenimiento?"
+        },
+        {
+         "t": "¿Los aparatos sometidos a presión (calderas, compresores) cuentan con habilitación y pruebas?"
+        }
+       ]
+      }
+     ],
+     "fin": "p-hallazgos-y-evidencia"
+    },
+    {
+     "id": "p-4-riesgo-electrico",
+     "titulo": "4. Riesgo Eléctrico",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "SUBCATEGORIA#4",
+       "col": "SUBCATEGORIA#4",
+       "etiqueta": "Subcategoría (marcá a cuál corresponde el hallazgo)",
+       "tipo": "una",
+       "req": false,
+       "opciones": [
+        {
+         "t": "¿La instalación posee protección contra contactos directos e indirectos (PAT, disyuntores, térmicas)?"
+        },
+        {
+         "t": "¿Los tableros eléctricos se encuentran cerrados, señalizados e identificados?"
+        },
+        {
+         "t": "¿El cableado se encuentra canalizado, aislado y en correcto estado?"
+        }
+       ]
+      }
+     ],
+     "fin": "p-hallazgos-y-evidencia"
+    },
+    {
+     "id": "p-5-proteccion-incendios",
+     "titulo": "5. Protección Incendios",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "SUBCATEGORIA#5",
+       "col": "SUBCATEGORIA#5",
+       "etiqueta": "Subcategoría (marcá a cuál corresponde el hallazgo)",
+       "tipo": "una",
+       "req": false,
+       "opciones": [
+        {
+         "t": "¿Existe un estudio de Carga de Fuego actualizado de las instalaciones?"
+        },
+        {
+         "t": "¿Dispone de extintores en cantidad adecuada, vigentes y con acceso despejado?"
+        },
+        {
+         "t": "¿Existen salidas de emergencia proporcionales, señalizadas e iluminadas?"
+        },
+        {
+         "t": "¿Se efectúan simulacros de evacuación y capacitación sobre el Plan de Emergencia?"
+        }
+       ]
+      }
+     ],
+     "fin": "p-hallazgos-y-evidencia"
+    },
+    {
+     "id": "p-6-ergonomia-y-ambiente",
+     "titulo": "6. Ergonomía y Ambiente",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "SUBCATEGORIA#6",
+       "col": "SUBCATEGORIA#6",
+       "etiqueta": "Subcategoría (marcá a cuál corresponde el hallazgo)",
+       "tipo": "una",
+       "req": false,
+       "opciones": [
+        {
+         "t": "¿Se cumplen los niveles mínimos de iluminación exigidos en los puestos de trabajo?"
+        },
+        {
+         "t": "¿Las condiciones de ventilación y temperatura (estrés térmico/higrotérmicas) son adecuadas?"
+        },
+        {
+         "t": "¿Se evalúan y gestionan los factores de riesgo ergonómico (cargas, posturas, repetitividad)?"
+        }
+       ]
+      }
+     ],
+     "fin": "p-hallazgos-y-evidencia"
+    },
+    {
+     "id": "p-7-sustancias-quimicas",
+     "titulo": "7. Sustancias Químicas",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "SUBCATEGORIA#7",
+       "col": "SUBCATEGORIA#7",
+       "etiqueta": "Subcategoría (marcá a cuál corresponde el hallazgo)",
+       "tipo": "una",
+       "req": false,
+       "opciones": [
+        {
+         "t": "¿Se dispone de las Hojas de Datos de Seguridad (FDS) del Sistema SGA?"
+        },
+        {
+         "t": "¿Se respeta la distancia mínima de 1 metro entre el nivel superior de estibas y el techo?"
+        },
+        {
+         "t": "¿Se miden e identifican contaminantes ambientales (ruido, polvos, vapores) si corresponde?"
+        }
+       ]
+      }
+     ],
+     "fin": "p-hallazgos-y-evidencia"
+    },
+    {
+     "id": "p-8-epp-y-capacitacion",
+     "titulo": "8. EPP y Capacitación",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "SUBCATEGORIA#8",
+       "col": "SUBCATEGORIA#8",
+       "etiqueta": "Subcategoría (marcá a cuál corresponde el hallazgo)",
+       "tipo": "una",
+       "req": false,
+       "opciones": [
+        {
+         "t": "¿Se entrega EPP certificado según los riesgos de cada puesto de trabajo?"
+        },
+        {
+         "t": "¿Se lleva el registro de entrega de EPP según Res. SRT 299/11 firmada por el trabajador?"
+        },
+        {
+         "t": "¿Se dictan y registran capacitaciones en materia de prevención de riesgos laborales?"
+        },
+        {
+         "t": "¿Se dispone de botiquín de primeros auxilios adecuadamente provisto?"
+        }
+       ]
+      }
+     ],
+     "fin": "p-hallazgos-y-evidencia"
+    },
+    {
+     "id": "p-9-orden-y-limpieza",
+     "titulo": "9. Orden y Limpieza",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "SUBCATEGORIA#9",
+       "col": "SUBCATEGORIA#9",
+       "etiqueta": "Subcategoría (marcá a cuál corresponde el hallazgo)",
+       "tipo": "una",
+       "req": false,
+       "opciones": [
+        {
+         "t": "9.1 ¿Se mantiene el orden y limpieza de los espacios de trabajo?"
+        },
+        {
+         "t": "9.2 ¿Se mantienen despejadas las salidas de emergencia?"
+        },
+        {
+         "t": "9.3 ¿Se mantiene despejado el sector al rededor de los extintores manuales y los nichos hidrantes?"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "p-hallazgos-y-evidencia",
+     "titulo": "HALLAZGOS Y EVIDENCIA",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "DESCRIPCION DEL HALLAZGO",
+       "col": "DESCRIPCION DEL HALLAZGO",
+       "etiqueta": "DESCRIPCION DEL HALLAZGO",
+       "tipo": "parrafo",
+       "req": true
+      },
+      {
+       "k": "NIVEL DE CRITICIDAD/RIESGO",
+       "col": "NIVEL DE CRITICIDAD/RIESGO",
+       "etiqueta": "NIVEL DE CRITICIDAD/RIESGO",
+       "tipo": "una",
+       "req": true,
+       "opciones": [
+        {
+         "t": "ALTO"
+        },
+        {
+         "t": "MEDIO"
+        },
+        {
+         "t": "BAJO"
+        }
+       ],
+       "colores": {
+        "ALTO": "#d62828",
+        "MEDIO": "#ff9f43",
+        "BAJO": "#ffe066"
+       }
+      },
+      {
+       "k": "EVIDENCIA FOTOGRAFICA",
+       "col": "EVIDENCIA FOTOGRAFICA",
+       "etiqueta": "EVIDENCIA FOTOGRAFICA",
+       "tipo": "foto",
+       "req": false,
+       "multiple": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "accidentes",
+   "codigo": "003",
+   "corto": "Accidentes",
+   "titulo": "Análisis de accidentes e incidentes",
+   "descripcion": "",
+   "destino": {
+    "form": "003 - ANALISIS DE ACCIDENTES E INCIDENTES - AP",
+    "hoja": "Respuestas de formulario accidentes"
+   },
+   "paginas": [
+    {
+     "id": "p-inicio",
+     "titulo": "Datos del evento",
+     "preguntas": [
+      {
+       "k": "NUMERO DE SINIESTRO/EXPEDIENTE ART",
+       "col": "NUMERO DE SINIESTRO/EXPEDIENTE ART",
+       "etiqueta": "NUMERO DE SINIESTRO/EXPEDIENTE ART",
+       "tipo": "texto",
+       "req": true
+      },
+      {
+       "k": "FECHA",
+       "col": "FECHA",
+       "etiqueta": "FECHA",
+       "tipo": "fecha",
+       "req": false
+      },
+      {
+       "k": "HORA",
+       "col": "HORA",
+       "etiqueta": "HORA",
+       "tipo": "hora",
+       "req": false
+      },
+      {
+       "k": "NOMBRE Y APELLIDO DEL AFECTADO",
+       "col": "NOMBRE Y APELLIDO DEL AFECTADO",
+       "etiqueta": "NOMBRE Y APELLIDO DEL AFECTADO",
+       "tipo": "texto",
+       "req": false
+      },
+      {
+       "k": "SECTOR",
+       "col": "SECTOR",
+       "etiqueta": "SECTOR",
+       "tipo": "una",
+       "req": false,
+       "opciones": [
+        {
+         "t": "ADMINISTRACION"
+        },
+        {
+         "t": "PRODUCCION"
+        },
+        {
+         "t": "VIA PUBLICA"
+        },
+        {
+         "t": "MANTENIMIENTO"
+        }
+       ]
+      },
+      {
+       "k": "TIPO DE EVENTO",
+       "col": "TIPO DE EVENTO",
+       "etiqueta": "TIPO DE EVENTO",
+       "tipo": "una",
+       "req": false,
+       "opciones": [
+        {
+         "t": "ACCIDENTE c/BAJA"
+        },
+        {
+         "t": "ACCIDENTE s/BAJA"
+        },
+        {
+         "t": "INCIDENTE/CUASI ACCIDENTE"
+        },
+        {
+         "t": "IN ITINERE"
+        },
+        {
+         "t": "ENFERMEDAD PROFESIONAL"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "p-analisis-de-causa-raiz",
+     "titulo": "ANALISIS DE CAUSA RAIZ",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "Causas Inmediatas (Actos / Condiciones)",
+       "col": "Causas Inmediatas (Actos / Condiciones)",
+       "etiqueta": "Causas Inmediatas (Actos / Condiciones)",
+       "tipo": "varias",
+       "req": false,
+       "opciones": [
+        "FALTA DE EPP",
+        "DESPROTECCION DE MAQUINARIA",
+        "PISO RESBALADIZO",
+        "PROCEDIMIENTO NO SEGUIDO"
+       ],
+       "otro": true
+      },
+      {
+       "k": "Causas Raíz / Factores Organizativos",
+       "col": "Causas Raíz / Factores Organizativos",
+       "etiqueta": "Causas Raíz / Factores Organizativos",
+       "tipo": "varias",
+       "req": false,
+       "opciones": [
+        "FALTA DE CAPACITACION",
+        "PROCEDIMIENTO INEXISTENTE/DESACTUALIZADO",
+        "FALSA PERCEPCION DEL RIESGO"
+       ],
+       "otro": true
+      },
+      {
+       "k": "Detalle del Análisis (5 Porqué / Árbol de Causas)",
+       "col": "Detalle del Análisis (5 Porqué / Árbol de Causas)",
+       "etiqueta": "Detalle del Análisis (5 Porqué / Árbol de Causas)",
+       "tipo": "parrafo",
+       "req": false
+      },
+      {
+       "k": "Evidencia Fotografica",
+       "col": "Evidencia Fotografica",
+       "etiqueta": "Evidencia fotográfica",
+       "tipo": "foto",
+       "req": false,
+       "multiple": true
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "id": "ptw",
+   "codigo": "004",
+   "corto": "Permisos",
+   "titulo": "Permisos de trabajo (PTW)",
+   "descripcion": "Un Permiso de Trabajo (o Autorización de Trabajo) es un documento oficial e indispensable en las áreas de Seguridad, Higiene y Medio Ambiente (HSE). Su función principal es evaluar, autorizar y normar de forma previa la realización de tareas o actividades potencialmente peligrosas o no rutinarias dentro de una organización.",
+   "destino": {
+    "form": "004 - PERMISOS DE TRABAJO",
+    "hoja": "PERMISOS SOLICITADOS"
+   },
+   "paginas": [
+    {
+     "id": "p-inicio",
+     "titulo": "Datos del trabajo",
+     "preguntas": [
+      {
+       "k": "FECHA DE INICIO DE LA TAREA",
+       "col": "FECHA DE INICIO DE LA TAREA",
+       "etiqueta": "FECHA DE INICIO DE LA TAREA",
+       "tipo": "fecha",
+       "req": true
+      },
+      {
+       "k": "HORA DE INICIO",
+       "col": "HORA DE INICIO",
+       "etiqueta": "HORA DE INICIO",
+       "tipo": "hora",
+       "req": true
+      },
+      {
+       "k": "SECTOR DE TRABAJO",
+       "col": "SECTOR DE TRABAJO",
+       "etiqueta": "SECTOR DE TRABAJO",
+       "tipo": "texto",
+       "req": true
+      },
+      {
+       "k": "¿QUIEN REALIZA LA TAREA?",
+       "col": "¿QUIEN REALIZA LA TAREA?",
+       "etiqueta": "¿QUIEN REALIZA LA TAREA?",
+       "tipo": "lista",
+       "req": true,
+       "opciones": [
+        {
+         "t": "MANTENIMIENTO"
+        },
+        {
+         "t": "CONTRATISTA - TERCERO"
+        },
+        {
+         "t": "LIMPIEZA"
+        }
+       ]
+      },
+      {
+       "k": "AREA RESPONSABLE - NOMBRE DE CONTRATISTA",
+       "col": "AREA RESPONSABLE - NOMBRE DE CONTRATISTA",
+       "etiqueta": "AREA RESPONSABLE - NOMBRE DE CONTRATISTA",
+       "tipo": "texto",
+       "req": true
+      },
+      {
+       "k": "DESCRIPCION DE LA TAREA O TRABAJOS A REALIZAR",
+       "col": "DESCRIPCION DE LA TAREA O TRABAJOS A REALIZAR",
+       "etiqueta": "DESCRIPCION DE LA TAREA O TRABAJOS A REALIZAR",
+       "tipo": "parrafo",
+       "req": true
+      },
+      {
+       "k": "TIPO DE PERMISO DE TRABAJO",
+       "col": "TIPO DE PERMISO DE TRABAJO",
+       "etiqueta": "TIPO DE PERMISO DE TRABAJO",
+       "tipo": "una",
+       "req": true,
+       "opciones": [
+        {
+         "t": "EN CALIENTE",
+         "ir": "p-permisos-de-trabajo-en-caliente"
+        },
+        {
+         "t": "EN FRIO/GENERAL",
+         "ir": "p-permisos-de-trabajo-en-frio-generales"
+        },
+        {
+         "t": "EN ALTURA",
+         "ir": "p-permisos-de-trabajo-en-altura"
+        },
+        {
+         "t": "EN ESPACIOS CONFINADOS",
+         "ir": "p-permisos-de-trabajo-en-espacios-confinados"
+        }
+       ]
+      }
+     ]
+    },
+    {
+     "id": "p-permisos-de-trabajo-en-caliente",
+     "titulo": "PERMISOS DE TRABAJO EN CALIENTE",
+     "ayuda": "Para actividades que generen chispas, llamas abiertas o calor excesivo (ej. soldadura, oxicorte, amolado).",
+     "preguntas": [
+      {
+       "k": "CALIENTE CHECKLIST",
+       "col": "CALIENTE CHECKLIST",
+       "etiqueta": "CALIENTE CHECKLIST",
+       "tipo": "varias",
+       "req": true,
+       "ayuda": "Previo al inicio de la tarea, es necesario completar este formulario y que todas las partes estén de acuerdo de que se cumplen todas las condiciones.",
+       "opciones": [
+        "Limpieza de área: Radio libre de combustibles sólidos o líquidos en un perímetro de al menos 10-11 metros.",
+        "Protección fija o biombo: Colocación de mantas ignífugas o mamparas protectoras contra chispas.",
+        "Protección de drenajes/canaletas: Tapa de alcantarillas o sumideros para evitar acumulación de vapores.",
+        "Protección Incendio Activa: Presencia de extintor de incendio portátil (ABC o CO2) de mínimo 5/10 kg directo al pie de la tarea y verificado.",
+        "Vigilante de Fuego (Firewatch): Designación explícita de un vigía capacitado durante y hasta 30 minutos después de concluida la tarea.",
+        "EPP Específico: Careta/máscara de soldar o antiparras de oxicorte, coleto/delantal de cuero, polainas, guantes tipo mosquetero, protección auditiva y calzado con puntera."
+       ],
+       "otro": true
+      }
+     ],
+     "fin": "p-firmas-y-roles-responsables"
+    },
+    {
+     "id": "p-permisos-de-trabajo-en-altura",
+     "titulo": "PERMISOS DE TRABAJO EN ALTURA",
+     "ayuda": "Para tareas realizadas a niveles superiores o donde exista riesgo de caída a distinto nivel (generalmente a partir de 1.80 metros o según legislación local).",
+     "preguntas": [
+      {
+       "k": "ALTURA CHECKLIST",
+       "col": "ALTURA CHECKLIST",
+       "etiqueta": "ALTURA CHECKLIST",
+       "tipo": "varias",
+       "req": true,
+       "ayuda": "Previo al inicio de la tarea, es necesario completar este formulario y que todas las partes estén de acuerdo de que se cumplen todas las condiciones.",
+       "opciones": [
+        "Aptitud Física: Confirmación de que el personal no presenta vértigo, hipertensión o malestar momentáneo.",
+        "Punto de Anclaje Certificado: Verificación del punto o línea de vida estructural capaz de soportar la carga requerida.",
+        "Inspección de Sistema Anti-caídas: - Arnés de cuerpo completo (sin costuras deshilachadas ni hebillas defectuosas) - Cabo/Línea de vida con absorbedor de impacto y conectores/mosquetones de doble traba.",
+        "Inspección de Equipos de Elevación: Andamios: Armado completo, nivelado, trabas de seguridad, plataformas completas con rodapiés y tarjeta de habilitación \"APTO\". Escaleras: Zapatas antideslizantes, ángulo correcto (1:4), atadas en la parte superior. Plataformas de elevación (PEMAP): Operador capacitado y uso obligatorio de arnés enganchado a la canasta.",
+        "Sujeción de Herramientas: Baldes, bolsas o drizas sujetas para evitar la caída de objetos a niveles inferiores."
+       ],
+       "otro": true
+      }
+     ],
+     "fin": "p-firmas-y-roles-responsables"
+    },
+    {
+     "id": "p-permisos-de-trabajo-en-espacios-confinados",
+     "titulo": "PERMISOS DE TRABAJO EN ESPACIOS CONFINADOS",
+     "ayuda": "Para el ingreso a tanques, silos, fozas, galerías, tuberías o cámaras donde la atmósfera pueda ser deficiente en oxígeno, acumular gases tóxicos/inflamables o presentar dificultades de escape.",
+     "preguntas": [
+      {
+       "k": "ESP CONF CHECKLIST",
+       "col": "ESP CONF CHECKLIST",
+       "etiqueta": "ESP CONF CHECKLIST",
+       "tipo": "varias",
+       "req": false,
+       "opciones": [
+        "Monitoreo Atmosférico Obligatorio (Medición con detector de gases cargado y calibrado): % Oxígeno (Rango seguro: 19,5%−23,5%). LEL / Inflamabilidad (0%). Monóxido de Carbono (CO) y Sulfhídrico (H₂S) dentro de límites permisibles.",
+        "Ventilación Mecánica / Inyección de Aire: Ventilación previa y continua durante la estadía del personal dentro del recinto.",
+        "Aislamiento Total de Líneas: Cegado/bloqueo ciego de tuberías de entrada o salida de fluidos o productos químicos.",
+        "Vigía / Standby Externo: Presencia obligatoria de un vigía en el exterior del espacio confinado con comunicación constante y medio de alarma.",
+        "Plan y Equipos de Rescate: Trípode con torno/malacate, arnés de rescate puesto en el trabajador dentro del espacio confinado y equipo de autocontenido/respiratorio disponible de emergencia."
+       ]
+      }
+     ],
+     "fin": "p-firmas-y-roles-responsables"
+    },
+    {
+     "id": "p-permisos-de-trabajo-en-frio-generales",
+     "titulo": "PERMISOS DE TRABAJO EN FRIO (GENERALES)",
+     "ayuda": "Para tareas no rutinarias que no generan chispas ni involucran los riesgos específicos de altura o espacios confinados, pero sí entrañan riesgos mecánicos, químicos, hidráulicos o de mantenimiento general.",
+     "preguntas": [
+      {
+       "k": "FRIO CHECKLIST",
+       "col": "FRIO CHECKLIST",
+       "etiqueta": "FRIO CHECKLIST",
+       "tipo": "varias",
+       "req": true,
+       "ayuda": "Previo al inicio de la tarea, es necesario completar este formulario y que todas las partes estén de acuerdo de que se cumplen todas las condiciones.",
+       "opciones": [
+        "Aislamiento de Energías (LOTO): Bloqueo y etiquetado con candados/tarjetas de fuentes de energía eléctrica, neumática, hidráulica o mecánica antes de intervenir equipos.",
+        "Despresurización / Purga: Verificación de presión cero y purga de líneas, cañerías o recipientes.",
+        "Delimitación y Señalización: Vallado, conos o cinta de peligro para acordonar la zona de trabajo e impedir el paso de terceros.",
+        "Paredes / Pisos Secos y Limpios: Área libre de derrames o grasas (metodología 5S).",
+        "Herramientas en buen estado: Inspección visual de cables, fichas, aislamiento y protecciones/guardas mecánicas.",
+        "FDS / Hojas de Seguridad: Fichas de productos químicos a mano en caso de manipular sustancias (Sistema SGA)."
+       ],
+       "otro": true
+      }
+     ]
+    },
+    {
+     "id": "p-firmas-y-roles-responsables",
+     "titulo": "Firmas y Roles Responsables:",
+     "ayuda": "",
+     "preguntas": [
+      {
+       "k": "OBSERVACIONES",
+       "col": "OBSERVACIONES",
+       "etiqueta": "OBSERVACIONES",
+       "tipo": "parrafo",
+       "req": true
+      },
+      {
+       "k": "OK PARA INICIAR TAREAS",
+       "col": "OK PARA INICIAR TAREAS",
+       "etiqueta": "OK PARA INICIAR TAREAS",
+       "tipo": "una",
+       "req": true,
+       "opciones": [
+        {
+         "t": "Sí"
+        },
+        {
+         "t": "No"
+        }
+       ]
+      },
+      {
+       "k": "Emisor / Autorizador: Supervisor del área/Planta que autoriza el trabajo.",
+       "col": "Emisor / Autorizador: Supervisor del área/Planta que autoriza el trabajo.",
+       "etiqueta": "Emisor / Autorizador: Supervisor del área/Planta que autoriza el trabajo.",
+       "tipo": "texto",
+       "req": true
+      },
+      {
+       "k": "Ejecutor / Responsable del Trabajo: Quien lidera o ejecuta la tarea.",
+       "col": "Ejecutor / Responsable del Trabajo: Quien lidera o ejecuta la tarea.",
+       "etiqueta": "Ejecutor / Responsable del Trabajo: Quien lidera o ejecuta la tarea.",
+       "tipo": "texto",
+       "req": true
+      },
+      {
+       "k": "Personal Interviniente: Firmas de todos los trabajadores involucrados que tomaron conocimiento de los riesgos.",
+       "col": "Personal Interviniente: Firmas de todos los trabajadores involucrados que tomaron conocimiento de los riesgos.",
+       "etiqueta": "Personal Interviniente: Firmas de todos los trabajadores involucrados que tomaron conocimiento de los riesgos.",
+       "tipo": "texto",
+       "req": true
+      },
+      {
+       "k": "Personal Higiene y Seguridad Laboral",
+       "col": "Personal Higiene y Seguridad Laboral",
+       "etiqueta": "Personal Higiene y Seguridad Laboral",
+       "tipo": "texto",
+       "req": true
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

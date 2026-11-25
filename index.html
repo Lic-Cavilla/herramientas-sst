@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#223949">
+<meta name="color-scheme" content="light">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>Formularios QHSE</title>
+<style>
+:root{--az:#223949;--na:#FF6A00;--bg:#eef3f7;--br:#d5dde4;--tx:#1c2b36;--mut:#5b6b76;--err:#B3341F;--ok:#1D7A46}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{font:16px/1.45 "Segoe UI",system-ui,Roboto,Arial,sans-serif;background:var(--bg);color:var(--tx);min-height:100vh;min-height:100dvh}
+header.top{background:var(--az);color:#fff;padding:calc(10px + env(safe-area-inset-top)) 16px 10px;border-bottom:4px solid var(--na);display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:5}
+header.top h1{font-size:17px;margin:0;flex:1;line-height:1.2}
+header.top small{display:block;font-weight:400;opacity:.85;font-size:12px}
+header.top button{background:transparent;color:#fff;border:1px solid rgba(255,255,255,.55);border-radius:8px;padding:8px 12px;font:inherit;font-size:14px}
+main{padding:16px 16px 120px;max-width:720px;margin:0 auto}
+.card{display:flex;align-items:center;gap:14px;width:100%;text-align:left;background:#fff;border:1px solid var(--br);border-left:6px solid var(--na);border-radius:12px;padding:16px;margin:0 0 12px;font:inherit;color:inherit;min-height:72px}
+.card:active{background:#fff6ee}
+.card .cod{background:var(--az);color:#fff;border-radius:8px;padding:6px 9px;font-weight:700;font-size:14px}
+.card b{display:block;font-size:17px}.card span.s{color:var(--mut);font-size:13px}
+.bar{background:#fff1e6;border-left:4px solid var(--na);padding:10px 12px;border-radius:8px;margin:0 0 14px;display:flex;gap:10px;align-items:center;justify-content:space-between;font-size:14px}
+.bar button{background:var(--na);color:#fff;border:0;border-radius:8px;padding:9px 14px;font:inherit;font-weight:600}
+.paso{font-size:12px;color:var(--mut);text-transform:uppercase;letter-spacing:.06em;margin:0 0 4px}
+h2{font-size:20px;margin:0 0 6px;color:var(--az)}
+.ayuda{color:var(--mut);font-size:14px;margin:0 0 12px;white-space:pre-line}
+.campo{background:#fff;border:1px solid var(--br);border-radius:12px;padding:14px;margin:0 0 12px}
+.campo.mal{border-color:var(--err);box-shadow:0 0 0 2px rgba(179,52,31,.15)}
+.campo>label.et,.campo>.et{display:block;font-weight:600;font-size:15px;margin:0 0 8px;color:var(--az)}
+.req{color:var(--err)}
+.campo .ay{font-size:13px;color:var(--mut);margin:-4px 0 8px}
+input[type=text],input[type=date],input[type=time],input[type=url],input[type=password],select,textarea{width:100%;font:inherit;font-size:16px;padding:12px;border:1.5px solid #b9c7d2;border-radius:10px;background:#fff;color:var(--tx)}
+textarea{min-height:110px;resize:vertical}
+.ops{display:flex;flex-direction:column;gap:8px}
+.op{display:flex;align-items:flex-start;gap:12px;border:1.5px solid #b9c7d2;border-radius:10px;padding:12px;background:#fff;cursor:pointer}
+.op input{width:22px;height:22px;margin:1px 0 0;flex:none;accent-color:var(--az)}
+.op.on{border-color:var(--az);background:#e8f0f6}
+.op.col.on{color:#111;font-weight:700}
+.otro{margin-top:8px}
+.fotos{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.fotos .f{position:relative}
+.fotos img{width:84px;height:84px;object-fit:cover;border-radius:8px;border:1px solid var(--br)}
+.fotos button{position:absolute;top:-6px;right:-6px;width:26px;height:26px;border-radius:50%;border:0;background:var(--err);color:#fff;font-size:15px;line-height:1}
+.btn{border:0;border-radius:10px;padding:13px 18px;font:inherit;font-weight:700;font-size:16px}
+.btn.p{background:var(--na);color:#fff}.btn.s{background:var(--az);color:#fff}.btn.g{background:#fff;color:var(--az);border:1.5px solid var(--az)}
+.btn[disabled]{opacity:.55}
+footer.nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--br);padding:10px 16px calc(10px + env(safe-area-inset-bottom));display:flex;gap:10px;z-index:5}
+footer.nav .btn{flex:1}
+.err{color:var(--err);font-weight:600;margin:6px 0;min-height:1.2em}
+.item{background:#fff;border:1px solid var(--br);border-radius:10px;padding:12px;margin:0 0 10px;font-size:14px}
+.item .e{color:var(--err);font-size:13px}
+.ok{color:var(--ok);font-weight:600}
+.row{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.row .btn{flex:1;min-width:140px}
+.hecho{text-align:center;padding:28px 8px}
+.hecho .t{font-size:44px}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:90px;background:var(--az);color:#fff;padding:10px 16px;border-radius:10px;max-width:90%;z-index:20;font-size:14px}
+pre.log{white-space:pre-wrap;background:#fff;border:1px solid var(--br);border-radius:8px;padding:10px;font-size:13px}
+.intro{font-size:13px;color:var(--mut);margin:0 0 12px;white-space:pre-line}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+'use strict';
+const root = document.getElementById('root');
+const S = { data: null, cfg: { url: '', clave: '' }, form: null, A: {}, path: [], enviando: false, instalar: null };
+
+/* ---------- utilidades ---------- */
+function el(t, p, ...c) {
+  const e = document.createElement(t);
+  for (const k in (p || {})) {
+    const v = p[k];
+    if (k === 'class') e.className = v;
+    else if (k.startsWith('on')) e.addEventListener(k.slice(2), v);
+    else if (v === true) e.setAttribute(k, '');
+    else if (v !== false && v != null) e.setAttribute(k, v);
+  }
+  c.flat(Infinity).forEach(x => { if (x == null || x === false) return; e.append(x.nodeType ? x : document.createTextNode(String(x))); });
+  return e;
+}
+const uid = () => (crypto.randomUUID ? crypto.randomUUID() : 'id-' + Date.now() + '-' + Math.random().toString(36).slice(2));
+const hoy = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0'); };
+const fmtDia = s => { const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(s || ''); return m ? m[3] + '/' + m[2] + '/' + m[1] : (s || ''); };
+function toast(t) { const x = el('div', { class: 'toast' }, t); document.body.append(x); setTimeout(() => x.remove(), 3200); }
+
+/* ---------- almacenamiento (IndexedDB con respaldo en memoria) ---------- */
+const DB = (() => {
+  const mem = { cola: new Map(), enviados: new Map(), borrador: new Map() };
+  let p = null, roto = false;
+  const abrir = () => p || (p = new Promise((res, rej) => {
+    try {
+      const r = indexedDB.open('qhse-app', 1);
+      r.onupgradeneeded = () => { ['cola', 'enviados', 'borrador'].forEach(n => r.result.createObjectStore(n, { keyPath: 'id' })); };
+      r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+    } catch (e) { rej(e); }
+  }));
+  async function tx(s, m, f) {
+    if (!roto) {
+      try {
+        const d = await abrir();
+        return await new Promise((res, rej) => { const t = d.transaction(s, m); const r = f(t.objectStore(s)); t.oncomplete = () => res(r && r.result); t.onerror = () => rej(t.error); t.onabort = () => rej(t.error); });
+      } catch (e) { roto = true; }
+    }
+    const M = mem[s]; let r;
+    f({ put: v => M.set(v.id, v), get: k => (r = { result: M.get(k) }), getAll: () => (r = { result: [...M.values()] }), delete: k => M.delete(k) });
+    return r && r.result;
+  }
+  return {
+    put: (s, v) => tx(s, 'readwrite', x => x.put(v)),
+    get: (s, k) => tx(s, 'readonly', x => x.get(k)),
+    all: s => tx(s, 'readonly', x => x.getAll()),
+    del: (s, k) => tx(s, 'readwrite', x => x.delete(k))
+  };
+})();
+
+function cargarCfg() { try { Object.assign(S.cfg, JSON.parse(localStorage.getItem('qhse-cfg') || '{}')); } catch (e) {} }
+function guardarCfg() { try { localStorage.setItem('qhse-cfg', JSON.stringify(S.cfg)); } catch (e) {} }
+
+/* ---------- pantalla de inicio ---------- */
+async function inicio() {
+  S.form = null;
+  const pend = (await DB.all('cola')) || [];
+  const conexion = !!(S.cfg.url && S.cfg.clave);
+  root.replaceChildren(
+    el('header', { class: 'top' },
+      el('h1', {}, S.data.app.titulo, el('small', {}, S.data.app.sub)),
+      el('button', { onclick: ajustes }, 'Ajustes')),
+    el('main', {},
+      !conexion ? el('div', { class: 'bar' }, el('span', {}, 'Falta conectar con tus planillas. Lo cargado se guarda en este teléfono.'), el('button', { onclick: ajustes }, 'Conectar')) : null,
+      pend.length ? el('div', { class: 'bar' }, el('span', {}, pend.length + (pend.length === 1 ? ' registro pendiente de enviar' : ' registros pendientes de enviar')), el('button', { onclick: cola }, 'Ver')) : null,
+      S.data.formularios.map(f => el('button', { class: 'card', onclick: () => abrirForm(f.id) },
+        el('span', { class: 'cod' }, f.codigo),
+        el('span', {}, el('b', {}, f.titulo), el('span', { class: 's' }, f.paginas.length + (f.paginas.length === 1 ? ' página' : ' páginas')))
+      )),
+      S.instalar ? el('div', { class: 'row' }, el('button', { class: 'btn g', onclick: instalarApp }, 'Instalar como aplicación')) : null
+    ));
+}
+
+/* ---------- formulario ---------- */
+const pagina = id => S.form.paginas.find(p => p.id === id);
+const preguntas = () => S.form.paginas.flatMap(p => p.preguntas);
+
+async function abrirForm(id, previo) {
+  S.form = S.data.formularios.find(f => f.id === id);
+  S.A = previo ? previo.A : {}; S.path = previo ? previo.path : [S.form.paginas[0].id];
+  if (!previo) {
+    const b = await DB.get('borrador', 'b-' + id);
+    if (b && confirm('Hay un borrador sin terminar de «' + S.form.titulo + '». ¿Continuar con ese borrador?\n\nAceptar = continuar · Cancelar = empezar de nuevo')) { S.A = b.A; S.path = b.path; }
+    else if (b) await DB.del('borrador', 'b-' + id);
+    if (!b || !S.path.length) { S.A = {}; S.path = [S.form.paginas[0].id]; }
+    if (!Object.keys(S.A).length) preguntas().filter(q => q.tipo === 'fecha').forEach(q => { S.A[q.k] = hoy(); });
+  }
+  dibujar();
+}
+
+let tBorr = null;
+function guardarBorrador() {
+  clearTimeout(tBorr);
+  tBorr = setTimeout(() => { if (S.form && !S.guardando) DB.put('borrador', { id: 'b-' + S.form.id, A: S.A, path: S.path }).catch(() => {}); }, 400);
+}
+
+function siguiente(pg) {
+  for (const q of pg.preguntas) {
+    if (q.tipo !== 'una') continue;
+    const v = S.A[q.k];
+    if (v === '§otro' && q.otroIr) return q.otroIr;
+    const o = (q.opciones || []).find(x => x.t === v && x.ir);
+    if (o) return o.ir;
+  }
+  if (pg.fin) return pg.fin;
+  const i = S.form.paginas.findIndex(p => p.id === pg.id);
+  return i + 1 < S.form.paginas.length ? S.form.paginas[i + 1].id : 'END';
+}
+
+function dibujar() {
+  const f = S.form, pg = pagina(S.path[S.path.length - 1]);
+  const btnSig = el('button', { class: 'btn p', id: 'bsig', onclick: avanzar }, 'Siguiente');
+  const etiquetaBoton = () => { btnSig.textContent = siguiente(pg) === 'END' ? 'Guardar y enviar' : 'Siguiente'; };
+  S._etq = etiquetaBoton;
+  root.replaceChildren(
+    el('header', { class: 'top' },
+      el('h1', {}, f.codigo + ' · ' + f.titulo),
+      el('button', { onclick: salir }, 'Salir')),
+    el('main', {},
+      el('div', { class: 'paso' }, 'Paso ' + S.path.length),
+      pg.titulo ? el('h2', {}, pg.titulo) : null,
+      S.path.length === 1 && f.descripcion ? el('p', { class: 'intro' }, f.descripcion) : null,
+      pg.ayuda ? el('p', { class: 'ayuda' }, pg.ayuda) : null,
+      pg.preguntas.map(campo),
+      el('div', { class: 'err', id: 'err', role: 'alert' })),
+    el('footer', { class: 'nav' },
+      el('button', { class: 'btn g', onclick: atras, disabled: S.path.length === 1 }, 'Atrás'),
+      btnSig));
+  etiquetaBoton();
+  window.scrollTo(0, 0);
+}
+
+function campo(q) {
+  const caja = el('div', { class: 'campo', id: 'q-' + q.k.replace(/\W/g, '_') });
+  const et = el('div', { class: 'et' }, q.etiqueta, q.req ? el('span', { class: 'req' }, ' *') : null);
+  caja.append(et);
+  if (q.ayuda) caja.append(el('div', { class: 'ay' }, q.ayuda));
+  const cambio = () => { caja.classList.remove('mal'); guardarBorrador(); if (S._etq) S._etq(); };
+  const val = S.A[q.k];
+  if (q.tipo === 'fecha' || q.tipo === 'hora' || q.tipo === 'texto') {
+    caja.append(el('input', { type: q.tipo === 'fecha' ? 'date' : q.tipo === 'hora' ? 'time' : 'text', value: val || '', autocomplete: 'off',
+      oninput: e => { S.A[q.k] = e.target.value; cambio(); } }));
+  } else if (q.tipo === 'parrafo') {
+    const t = el('textarea', { oninput: e => { S.A[q.k] = e.target.value; cambio(); } }); t.value = val || ''; caja.append(t);
+  } else if (q.tipo === 'lista') {
+    const s = el('select', { onchange: e => { S.A[q.k] = e.target.value; cambio(); } },
+      el('option', { value: '' }, 'Elegí una opción…'), q.opciones.map(o => el('option', { value: o.t || o }, o.t || o)));
+    s.value = val || ''; caja.append(s);
+  } else if (q.tipo === 'una' || q.tipo === 'varias') {
+    const multi = q.tipo === 'varias', ops = q.opciones.map(o => o.t || o);
+    const cont = el('div', { class: 'ops' }), otroIn = el('input', { type: 'text', class: 'otro', placeholder: 'Escribí cuál…', value: S.A[q.k + '§otro'] || '', oninput: e => { S.A[q.k + '§otro'] = e.target.value; cambio(); } });
+    const sel = () => multi ? (S.A[q.k] || []) : [S.A[q.k]];
+    const pintar = () => {
+      cont.replaceChildren();
+      const lista = ops.concat(q.otro ? ['§otro'] : []);
+      lista.forEach(o => {
+        const on = sel().includes(o), txt = o === '§otro' ? 'Otro' : o;
+        const inp = el('input', { type: multi ? 'checkbox' : 'radio', name: q.k, checked: on, onchange: e => {
+          if (multi) { const a = new Set(S.A[q.k] || []); e.target.checked ? a.add(o) : a.delete(o); S.A[q.k] = [...a]; } else S.A[q.k] = o;
+          cambio(); pintar(); } });
+        const lab = el('label', { class: 'op' + (on ? ' on' : '') + (q.colores && q.colores[o] && on ? ' col' : ''), style: on && q.colores && q.colores[o] ? 'background:' + q.colores[o] + ';border-color:' + q.colores[o] : null }, inp, el('span', {}, txt));
+        cont.append(lab);
+      });
+      otroIn.style.display = sel().includes('§otro') ? '' : 'none';
+    };
+    pintar(); caja.append(cont, otroIn);
+  } else if (q.tipo === 'foto') {
+    const miniaturas = el('div', { class: 'fotos' });
+    const pintar = () => {
+      miniaturas.replaceChildren(...(S.A[q.k] || []).map((d, i) => el('div', { class: 'f' }, el('img', { src: d }),
+        el('button', { type: 'button', 'aria-label': 'Quitar foto', onclick: () => { S.A[q.k].splice(i, 1); cambio(); pintar(); } }, '×'))));
+    };
+    const inp = el('input', { type: 'file', accept: 'image/*', multiple: !!q.multiple, style: 'display:none', onchange: async e => {
+      for (const f of e.target.files) { try { (S.A[q.k] = S.A[q.k] || []).push(await reducir(f)); } catch (x) { toast('No se pudo leer una de las fotos'); } }
+      e.target.value = ''; cambio(); pintar(); } });
+    caja.append(el('button', { type: 'button', class: 'btn g', onclick: () => inp.click() }, 'Sacar o elegir foto'), inp, miniaturas);
+    pintar();
+  }
+  return caja;
+}
+
+async function reducir(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((ok, no) => { const i = new Image(); i.onload = () => ok(i); i.onerror = no; i.src = url; });
+    const m = 1600, s = Math.min(1, m / Math.max(img.width, img.height));
+    const c = document.createElement('canvas'); c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+    c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+    return c.toDataURL('image/jpeg', 0.75);
+  } finally { URL.revokeObjectURL(url); }
+}
+
+function vacio(q) {
+  const v = S.A[q.k];
+  if (q.tipo === 'varias') {
+    const a = v || []; if (!a.length) return true;
+    return a.length === 1 && a[0] === '§otro' && !(S.A[q.k + '§otro'] || '').trim();
+  }
+  if (q.tipo === 'una') return !v || (v === '§otro' && !(S.A[q.k + '§otro'] || '').trim());
+  if (q.tipo === 'foto') return !(v && v.length);
+  return !String(v || '').trim();
+}
+
+function validar(pg) {
+  const malos = pg.preguntas.filter(q => q.req && vacio(q));
+  document.querySelectorAll('.campo.mal').forEach(c => c.classList.remove('mal'));
+  malos.forEach(q => document.getElementById('q-' + q.k.replace(/\W/g, '_')).classList.add('mal'));
+  const e = document.getElementById('err');
+  if (malos.length) {
+    e.textContent = 'Falta completar: ' + malos.map(q => q.etiqueta.replace(/\s+/g, ' ').slice(0, 40)).join(' · ');
+    document.getElementById('q-' + malos[0].k.replace(/\W/g, '_')).scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return false;
+  }
+  e.textContent = ''; return true;
+}
+
+function avanzar() {
+  const pg = pagina(S.path[S.path.length - 1]);
+  if (!validar(pg)) return;
+  const sig = siguiente(pg);
+  if (sig === 'END') return guardarRegistro();
+  S.path.push(sig); guardarBorrador(); dibujar();
+}
+function atras() { if (S.path.length > 1) { S.path.pop(); dibujar(); } }
+function salir() { if (confirm('Salir del formulario. Lo cargado queda como borrador en este teléfono.')) { guardarBorrador(); setTimeout(inicio, 450); } }
+
+function armarValores() {
+  const valores = {}, tipos = {}, fotos = {};
+  for (const id of S.path) {
+    for (const q of pagina(id).preguntas) {
+      if (vacio(q)) continue;
+      const v = S.A[q.k], otro = (S.A[q.k + '§otro'] || '').trim();
+      if (q.tipo === 'foto') { fotos[q.col] = v.slice(); continue; }
+      if (q.tipo === 'varias') valores[q.col] = v.map(x => x === '§otro' ? otro : x).filter(Boolean).join(', ');
+      else if (q.tipo === 'una') valores[q.col] = v === '§otro' ? otro : v;
+      else valores[q.col] = String(v).trim();
+      if (q.tipo === 'fecha' || q.tipo === 'hora') tipos[q.col] = q.tipo;
+    }
+  }
+  return { valores, tipos, fotos };
+}
+
+async function guardarRegistro() {
+  const f = S.form, { valores, tipos, fotos } = armarValores();
+  if (S.guardando) return; S.guardando = true;
+  const resumen = [valores.FECHA || valores['FECHA DE INICIO DE LA TAREA'] ? fmtDia(valores.FECHA || valores['FECHA DE INICIO DE LA TAREA']) : '',
+    valores.TAREA || valores['DESCRIPCION DEL HALLAZGO'] || valores['SECTOR DE TRABAJO'] || valores['NUMERO DE SINIESTRO/EXPEDIENTE ART'] || valores.SECTOR || ''].filter(Boolean).join(' · ').slice(0, 90);
+  const reg = { id: uid(), form: f.id, corto: f.corto, creado: new Date().toISOString(), resumen, valores, tipos, fotos, error: '' };
+  clearTimeout(tBorr);
+  await DB.put('cola', reg);
+  clearTimeout(tBorr);
+  await DB.del('borrador', 'b-' + f.id);
+  S.ultimo = { form: f, A: JSON.parse(JSON.stringify(S.A)) };
+  S.guardando = false; S.form = f;
+  listo(reg);
+  enviarPendientes(true);
+}
+
+function listo(reg) {
+  const f = S.form;
+  root.replaceChildren(
+    el('header', { class: 'top' }, el('h1', {}, f.codigo + ' · ' + f.titulo)),
+    el('main', {},
+      el('div', { class: 'hecho' }, el('div', { class: 't' }, '✔'), el('h2', {}, 'Guardado en el teléfono'),
+        el('p', { class: 'ayuda', id: 'estadoEnvio' }, S.cfg.url ? 'Enviando a la planilla…' : 'Todavía no está conectado con la planilla: queda pendiente.')),
+      f.repetir ? el('button', { class: 'btn p', style: 'width:100%;margin-bottom:10px', onclick: repetir }, f.repetir.texto) : null,
+      el('button', { class: 'btn s', style: 'width:100%;margin-bottom:10px', onclick: () => abrirForm(f.id) }, 'Cargar uno nuevo'),
+      el('button', { class: 'btn g', style: 'width:100%', onclick: inicio }, 'Volver al inicio')));
+}
+
+function repetir() {
+  const f = S.form, r = f.repetir, A = {};
+  const ant = S.ultimo.A;
+  r.claves.forEach(k => { if (ant[k] != null) A[k] = ant[k]; const o = ant[k + '§otro']; if (o) A[k + '§otro'] = o; });
+  const ini = f.paginas[0].id;
+  const path = r.irA === ini ? [ini] : [ini, r.irA];
+  abrirForm(f.id, { A, path });
+}
+
+/* ---------- envío ---------- */
+async function post(cuerpo) {
+  const resp = await fetch(S.cfg.url, { method: 'POST', body: JSON.stringify(Object.assign({ clave: S.cfg.clave }, cuerpo)), redirect: 'follow' });
+  const txt = await resp.text();
+  let j; try { j = JSON.parse(txt); } catch (e) { throw new Error('La respuesta del script no es válida (¿la dirección es la de la implementación web?)'); }
+  return j;
+}
+
+async function enviarPendientes(silencioso) {
+  if (S.enviando) return; if (!S.cfg.url || !S.cfg.clave) return;
+  S.enviando = true; let ok = 0, fallo = 0, avisos = [];
+  try {
+    const pend = ((await DB.all('cola')) || []).sort((a, b) => a.creado < b.creado ? -1 : 1);
+    for (const r of pend) {
+      try {
+        const j = await post({ accion: 'guardar', id: r.id, formulario: r.form, valores: r.valores, tipos: r.tipos, fotos: r.fotos });
+        if (!j.ok) throw new Error(j.error || 'Error del script');
+        if (j.faltan && j.faltan.length) avisos.push(r.corto + ': no encontré las columnas ' + j.faltan.join(', '));
+        await DB.del('cola', r.id);
+        await DB.put('enviados', { id: r.id, corto: r.corto, resumen: r.resumen, enviado: new Date().toISOString() });
+        ok++;
+      } catch (e) {
+        fallo++; r.error = String(e.message || e); await DB.put('cola', r);
+        if (/Failed to fetch|NetworkError|Load failed/i.test(r.error)) { r.error = 'Sin conexión: se enviará cuando haya señal.'; await DB.put('cola', r); break; }
+      }
+    }
+    const lim = ((await DB.all('enviados')) || []).sort((a, b) => a.enviado < b.enviado ? 1 : -1).slice(30);
+    for (const x of lim) await DB.del('enviados', x.id);
+  } finally { S.enviando = false; }
+  const est = document.getElementById('estadoEnvio');
+  if (est) { est.textContent = fallo ? 'No se pudo enviar todavía. Queda pendiente y se reintenta solo.' : (ok ? 'Enviado a la planilla ✔' : est.textContent); est.className = 'ayuda' + (fallo ? '' : ' ok'); }
+  if (avisos.length) alert(avisos.join('\n'));
+  if (!silencioso && ok) toast(ok + ' enviado(s)');
+  if (!silencioso && fallo) toast('Hay ' + fallo + ' sin enviar');
+}
+
+/* ---------- pendientes ---------- */
+async function cola() {
+  const pend = ((await DB.all('cola')) || []).sort((a, b) => a.creado < b.creado ? -1 : 1);
+  const env = ((await DB.all('enviados')) || []).sort((a, b) => a.enviado < b.enviado ? 1 : -1);
+  root.replaceChildren(
+    el('header', { class: 'top' }, el('h1', {}, 'Pendientes de enviar'), el('button', { onclick: inicio }, 'Volver')),
+    el('main', {},
+      el('div', { class: 'row' },
+        el('button', { class: 'btn p', onclick: async () => { await enviarPendientes(false); cola(); } }, 'Enviar ahora'),
+        el('button', { class: 'btn g', onclick: exportarCSV }, 'Exportar CSV')),
+      pend.length ? pend.map(r => el('div', { class: 'item' }, el('b', {}, r.corto), ' · ' + new Date(r.creado).toLocaleString('es-AR'), el('div', {}, r.resumen),
+        r.error ? el('div', { class: 'e' }, r.error) : null,
+        el('div', { style: 'margin-top:8px' }, el('button', { class: 'btn g', style: 'padding:8px 12px;font-size:14px', onclick: async () => { if (confirm('¿Eliminar este registro sin enviarlo?')) { await DB.del('cola', r.id); cola(); } } }, 'Eliminar'))))
+        : el('p', { class: 'ayuda' }, 'No hay nada pendiente.'),
+      env.length ? el('h2', { style: 'margin-top:20px' }, 'Enviados recientes') : null,
+      env.map(r => el('div', { class: 'item' }, el('b', {}, r.corto), ' · ' + new Date(r.enviado).toLocaleString('es-AR'), el('div', {}, r.resumen)))));
+}
+
+async function exportarCSV() {
+  const pend = (await DB.all('cola')) || [];
+  if (!pend.length) return toast('No hay pendientes');
+  const esc = v => '"' + String(v == null ? '' : v).replace(/"/g, '""') + '"';
+  for (const f of S.data.formularios) {
+    const rs = pend.filter(r => r.form === f.id); if (!rs.length) continue;
+    const cols = f.paginas.flatMap(p => p.preguntas).filter(q => q.tipo !== 'foto').map(q => q.col);
+    const lineas = [['Marca temporal'].concat(cols.map(c => c.split('#')[0])).map(esc).join(',')];
+    rs.forEach(r => lineas.push([new Date(r.creado).toLocaleString('es-AR')].concat(cols.map(c => r.valores[c] || '')).map(esc).join(',')));
+    const a = el('a', { href: URL.createObjectURL(new Blob(['﻿' + lineas.join('\r\n')], { type: 'text/csv' })), download: f.id + '-pendientes-' + hoy() + '.csv' });
+    document.body.append(a); a.click(); a.remove();
+  }
+}
+
+/* ---------- ajustes ---------- */
+function ajustes() {
+  const url = el('input', { type: 'url', value: S.cfg.url, placeholder: 'https://script.google.com/macros/s/…/exec', autocomplete: 'off' });
+  const clave = el('input', { type: 'password', value: S.cfg.clave, placeholder: 'La clave que pusiste en el script', autocomplete: 'off' });
+  const log = el('pre', { class: 'log', style: 'display:none' });
+  const guardar = () => { S.cfg.url = url.value.trim(); S.cfg.clave = clave.value.trim(); guardarCfg(); };
+  root.replaceChildren(
+    el('header', { class: 'top' }, el('h1', {}, 'Ajustes'), el('button', { onclick: () => { guardar(); inicio(); } }, 'Listo')),
+    el('main', {},
+      el('p', { class: 'ayuda' }, 'Estos dos datos se cargan una sola vez en cada teléfono y quedan guardados solo en ese teléfono.'),
+      el('div', { class: 'campo' }, el('div', { class: 'et' }, 'Dirección de la implementación web'), url),
+      el('div', { class: 'campo' }, el('div', { class: 'et' }, 'Clave'), clave),
+      el('div', { class: 'row' },
+        el('button', { class: 'btn s', onclick: async () => {
+          guardar(); log.style.display = ''; log.textContent = 'Probando…';
+          if (!S.cfg.url || !S.cfg.clave) { log.textContent = 'Completá la dirección y la clave.'; return; }
+          try {
+            const j = await post({ accion: 'probar', formularios: S.data.formularios.map(f => ({ id: f.id, cols: f.paginas.flatMap(p => p.preguntas).map(q => q.col) })) });
+            log.textContent = j.ok ? j.resultados.map(r => (r.ok ? '✔ ' : '✖ ') + r.id + ': ' + r.mensaje).join('\n') : '✖ ' + j.error;
+          } catch (e) { log.textContent = '✖ No se pudo conectar: ' + (e.message || e); }
+        } }, 'Probar conexión'),
+        el('button', { class: 'btn g', onclick: () => { guardar(); enviarPendientes(false); } }, 'Enviar pendientes')),
+      log,
+      el('div', { class: 'row', style: 'margin-top:14px' },
+        el('button', { class: 'btn g', onclick: cola }, 'Ver pendientes y enviados'),
+        el('button', { class: 'btn g', onclick: async () => { const rs = await (navigator.serviceWorker && navigator.serviceWorker.getRegistrations()); if (rs) for (const r of rs) await r.update(); location.reload(); } }, 'Actualizar la app')),
+      el('p', { class: 'ayuda' }, 'Versión ' + S.data.app.version)));
+}
+
+function instalarApp() { if (S.instalar) { S.instalar.prompt(); S.instalar = null; } }
+window.addEventListener('beforeinstallprompt', e => { e.preventDefault(); S.instalar = e; if (!S.form && S.data) inicio(); });
+window.addEventListener('online', () => enviarPendientes(true));
+
+/* ---------- arranque ---------- */
+(async function () {
+  cargarCfg();
+  try {
+    const r = await fetch('formularios.json', { cache: 'no-cache' });
+    S.data = await r.json();
+  } catch (e) {
+    root.textContent = 'No se pudo cargar formularios.json. Abrí la app con conexión una vez para que quede disponible sin internet.';
+    return;
+  }
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('sw.js').catch(() => {});
+  await inicio();
+  enviarPendientes(true);
+})();
+</script>
+</body>
+</html>
